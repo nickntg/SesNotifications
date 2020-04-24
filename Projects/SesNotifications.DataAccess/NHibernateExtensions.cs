@@ -2,6 +2,7 @@
 using FluentNHibernate.Cfg.Db;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Dialect;
+using SesNotifications.DataAccess.Mappings;
 
 namespace SesNotifications.DataAccess
 {
@@ -13,7 +14,11 @@ namespace SesNotifications.DataAccess
                 .Database(PostgreSQLConfiguration.Standard
                     .ConnectionString(connectionString)
                     .Dialect<PostgreSQL82Dialect>())
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<SessionManager>())
+                .Mappings(m => m.FluentMappings
+                    .Add<SesDeliveryMap>()
+                    .Add<SesComplaintMap>()
+                    .Add<SesNotificationMap>()
+                    .Add<SesBounceMap>())
                 .BuildSessionFactory();
 
             SessionManager.Build(sessionFactory);
