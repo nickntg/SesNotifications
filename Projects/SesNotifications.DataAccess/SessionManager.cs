@@ -12,7 +12,6 @@ namespace SesNotifications.DataAccess
 	public sealed class SessionManager
 	{
 		private const string SessionKey = "SesNotifications.UoW.Session";
-		private const string TransactionKey = "SesNotifications.UoW.Transaction";
 		private static ISessionFactory _sessionFactory;
 
         public static SessionManager Manager { get; private set; }
@@ -28,9 +27,9 @@ namespace SesNotifications.DataAccess
 			set => CallContext.SetData(SessionKey, value);
 		}
 
-		private ITransaction Transaction => ((ISession)CallContext.GetData(TransactionKey))?.Transaction;
+        private static ITransaction Transaction => ((ISession) CallContext.GetData(SessionKey))?.Transaction;
 
-		private SessionManager(ISessionFactory sessionFactory)
+        private SessionManager(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
         }
@@ -40,7 +39,7 @@ namespace SesNotifications.DataAccess
 			if (Transaction == null || !Transaction.IsActive)
 			{
 				GetSession().BeginTransaction(isolationLevel);
-			}
+            }
 		}
 
 		public void CloseSession()
