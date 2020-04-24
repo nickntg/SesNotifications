@@ -61,7 +61,6 @@ namespace SesNotifications.App.Services
 
             var notification = SaveNotification(delivery.Mail, content);
 
-            throw new InvalidOperationException("a");
             _sesDeliveriesRepository.Save(delivery.Create(notification.Id));
         }
 
