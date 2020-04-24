@@ -6,7 +6,7 @@ namespace SesNotifications.DataAccess.Mappings
     {
         public SesBounceMap()
         {
-            Table("bounces");
+            Table("ses_notifications.bounces");
             MapCommon();
             Map(x => x.BounceType).Column("bounce_type");
             Map(x => x.BounceSubType).Column("bounce_sub_type");

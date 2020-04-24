@@ -7,7 +7,7 @@ namespace SesNotifications.DataAccess.Mappings
     {
         public SesNotificationMap()
         {
-            Table("notifications");
+            Table("ses_notifications.notifications");
             Id(x => x.Id).GeneratedBy.Identity().Column("id");
             Map(x => x.Notification).Column("notification");
             Map(x => x.ReceivedAt).Column("received_at");

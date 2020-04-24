@@ -28,7 +28,7 @@ namespace SesNotifications.DataAccess
 			set => CallContext.SetData(SessionKey, value);
 		}
 
-		private ITransaction Transaction => ((ISession)CallContext.GetData(TransactionKey)).Transaction;
+		private ITransaction Transaction => ((ISession)CallContext.GetData(TransactionKey))?.Transaction;
 
 		private SessionManager(ISessionFactory sessionFactory)
         {

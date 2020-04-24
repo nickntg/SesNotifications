@@ -4,7 +4,7 @@ using SesNotifications.DataAccess.Entities;
 
 namespace SesNotifications.DataAccess.Repositories.Interfaces
 {
-    public interface IComplaintsRepository
+    public interface ISesComplaintsRepository
     {
         void Save(SesComplaint sesDelivery);
         SesComplaint FindById(long id);

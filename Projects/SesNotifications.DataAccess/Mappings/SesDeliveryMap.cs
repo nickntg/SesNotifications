@@ -6,7 +6,7 @@ namespace SesNotifications.DataAccess.Mappings
     {
         public SesDeliveryMap()
         {
-            Table("deliveries");
+            Table("ses_notifications.deliveries");
             MapCommon();
             Map(x => x.DeliveredAt).Column("delivered_at");
             Map(x => x.SmtpResponse).Column("smtp_response");

@@ -6,7 +6,7 @@ namespace SesNotifications.DataAccess.Mappings
     {
         public SesComplaintMap()
         {
-            Table("complaints");
+            Table("ses_notifications.complaints");
             MapCommon();
             Map(x => x.CreatedAt).Column("created_at");
             Map(x => x.ComplaintSubType).Column("complaint_sub_type");

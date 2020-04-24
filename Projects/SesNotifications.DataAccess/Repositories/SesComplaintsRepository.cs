@@ -7,13 +7,13 @@ using SesNotifications.DataAccess.Repositories.Interfaces;
 
 namespace SesNotifications.DataAccess.Repositories
 {
-    public class ComplaintsRepository : Repository, IComplaintsRepository
+    public class SesComplaintsRepository : Repository, ISesComplaintsRepository
     {
-        public ComplaintsRepository()
+        public SesComplaintsRepository()
         {
         }
 
-        public ComplaintsRepository(ISession session) : base(session)
+        public SesComplaintsRepository(ISession session) : base(session)
         {
         }
 

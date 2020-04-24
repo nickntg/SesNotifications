@@ -4,7 +4,7 @@ CREATE TABLE ses_notifications.bounces (
 	notification_id int8 NOT NULL,
 	notification_type varchar(32) NOT NULL,
 	sent_at timestamptz NOT NULL,
-	messageid varchar(128) NOT NULL,
+	message_id varchar(128) NOT NULL,
 	"from" varchar(256) NOT NULL COLLATE "ucs_basic",
 	source_arn varchar(256) NULL,
 	source_ip varchar(32) NULL,
@@ -23,7 +23,7 @@ CREATE INDEX bounces_bounced_recipients_idx ON ses_notifications.bounces USING b
 CREATE INDEX bounces_created_at_idx ON ses_notifications.bounces USING btree (created_at);
 CREATE INDEX bounces_from_idx ON ses_notifications.bounces USING btree ("from");
 CREATE UNIQUE INDEX bounces_id_idx ON ses_notifications.bounces USING btree (id);
-CREATE INDEX bounces_messageid_idx ON ses_notifications.bounces USING btree (messageid);
+CREATE INDEX bounces_message_id_idx ON ses_notifications.bounces USING btree (message_id);
 CREATE INDEX bounces_notification_id_idx ON ses_notifications.bounces USING btree (notification_id);
 CREATE INDEX bounces_sent_at_idx ON ses_notifications.bounces USING btree (sent_at);
 
@@ -32,7 +32,7 @@ CREATE TABLE ses_notifications.complaints (
 	notification_id int8 NOT NULL,
 	notification_type varchar(32) NOT NULL,
 	sent_at timestamptz NOT NULL,
-	messageid varchar(128) NOT NULL,
+	message_id varchar(128) NOT NULL,
 	"from" varchar(256) NOT NULL COLLATE "ucs_basic",
 	source_arn varchar(256) NULL,
 	source_ip varchar(32) NULL,
@@ -51,7 +51,7 @@ CREATE INDEX complaints_complaint_sub_type_idx ON ses_notifications.complaints (
 CREATE INDEX complaints_created_at_idx ON ses_notifications.complaints (created_at);
 CREATE INDEX complaints_from_idx ON ses_notifications.complaints ("from");
 CREATE UNIQUE INDEX complaints_id_idx ON ses_notifications.complaints (id);
-CREATE INDEX complaints_messageid_idx ON ses_notifications.complaints (messageid);
+CREATE INDEX complaints_message_id_idx ON ses_notifications.complaints (message_id);
 CREATE INDEX complaints_notification_id_idx ON ses_notifications.complaints (notification_id);
 CREATE INDEX complaints_sent_at_idx ON ses_notifications.complaints (sent_at);
 
@@ -60,7 +60,7 @@ CREATE TABLE ses_notifications.deliveries (
 	notification_id int8 NOT NULL,
 	notification_type varchar(32) NOT NULL,
 	sent_at timestamptz NOT NULL,
-	messageid varchar(128) NOT NULL,
+	message_id varchar(128) NOT NULL,
 	"from" varchar(256) NOT NULL COLLATE "ucs_basic",
 	source_arn varchar(256) NULL,
 	source_ip varchar(32) NULL,
@@ -74,7 +74,7 @@ CREATE TABLE ses_notifications.deliveries (
 CREATE INDEX deliveries_delivered_at_idx ON ses_notifications.deliveries (delivered_at);
 CREATE INDEX deliveries_from_idx ON ses_notifications.deliveries ("from");
 CREATE UNIQUE INDEX deliveries_id_idx ON ses_notifications.deliveries (id);
-CREATE INDEX deliveries_messageid_idx ON ses_notifications.deliveries (messageid);
+CREATE INDEX deliveries_message_id_idx ON ses_notifications.deliveries (message_id);
 CREATE INDEX deliveries_notification_id_idx ON ses_notifications.deliveries (notification_id);
 CREATE INDEX deliveries_recipients_idx ON ses_notifications.deliveries (recipients);
 CREATE INDEX deliveries_sent_at_idx ON ses_notifications.deliveries (sent_at);

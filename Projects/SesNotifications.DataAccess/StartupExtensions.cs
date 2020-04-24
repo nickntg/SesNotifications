@@ -3,10 +3,12 @@ using FluentNHibernate.Cfg.Db;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Dialect;
 using SesNotifications.DataAccess.Mappings;
+using SesNotifications.DataAccess.Repositories;
+using SesNotifications.DataAccess.Repositories.Interfaces;
 
 namespace SesNotifications.DataAccess
 {
-    public static class NHibernateExtensions
+    public static class StartupExtensions
     {
         public static IServiceCollection AddNHibernate(this IServiceCollection services, string connectionString)
         {
@@ -26,9 +28,20 @@ namespace SesNotifications.DataAccess
             return services;
         }
 
-        public static IServiceCollection AddMvcWithUnitOfWork(this IServiceCollection services)
+        public static IServiceCollection AddMvcWithUnitOfWork(this IServiceCollection services, int order)
         {
-            services.AddMvc(x => { x.Filters.AddService<UnitOfWorkFilter>(1); });
+            services.AddMvc(x => { x.Filters.AddService<UnitOfWorkFilter>(order); });
+
+            return services;
+        }
+
+        public static IServiceCollection AddScopedRepositories(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(UnitOfWorkFilter), typeof(UnitOfWorkFilter));
+            services.AddScoped<INotificationsRepository, NotificationsRepository>();
+            services.AddScoped<ISesBouncesRepository, SesBouncesRepository>();
+            services.AddScoped<ISesDeliveriesRepository, SesDeliveriesRepository>();
+            services.AddScoped<ISesComplaintsRepository, SesComplaintsRepository>();
 
             return services;
         }
