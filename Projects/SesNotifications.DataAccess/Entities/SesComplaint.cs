@@ -10,6 +10,6 @@ namespace SesNotifications.DataAccess.Entities
         public virtual string FeedbackId { get; set; }
         public virtual string ComplainedRecipients { get; set; }
         public virtual string UserAgent { get; set; }
-        public virtual DateTime ArrivalDate { get; set; }
+        public virtual DateTime? ArrivalDate { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SesNotifications.App.Controllers;
@@ -38,6 +37,21 @@ namespace SesNotifications.App.Services
 
         public void HandleNotification(string content)
         {
+            try
+            {
+                _logger.LogDebug($"Handling {content}");
+                HandleNotificationInternal(content);
+                _logger.LogDebug("Handled");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,$"Error occurred while handling content \r\n{content}");
+                throw;
+            }
+        }
+
+        private void HandleNotificationInternal(string content)
+        {
             var ses = JsonConvert.DeserializeObject<Ses>(content);
             switch (ses.NotificationType.ToLower())
             {
@@ -67,11 +81,19 @@ namespace SesNotifications.App.Services
         private void HandleComplaint(string content)
         {
             var complaint = JsonConvert.DeserializeObject<SesComplaintModel>(content);
+
+            var notification = SaveNotification(complaint.Mail, content);
+
+            _sesComplaintsRepository.Save(complaint.Create(notification.Id));
         }
 
         private void HandleBounce(string content)
         {
             var bounce = JsonConvert.DeserializeObject<SesBounceModel>(content);
+
+            var notification = SaveNotification(bounce.Mail, content);
+
+            _sesBouncesRepository.Save(bounce.Create(notification.Id));
         }
 
         private SesNotification SaveNotification(SesMail mail, string content)
