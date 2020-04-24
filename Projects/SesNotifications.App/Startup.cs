@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SesNotifications.App.Services;
+using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess;
 
 namespace SesNotifications.App
@@ -16,17 +18,23 @@ namespace SesNotifications.App
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddNHibernate(Configuration.GetConnectionString("Database"));
+
             services.AddScopedRepositories();
+            ConfigureScopedRepositories(services);
+
             services.AddMvcWithUnitOfWork(0);
 
             services.AddControllersWithViews();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void ConfigureScopedRepositories(IServiceCollection services)
+        {
+            services.AddScoped<INotificationService, NotificationService>();
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
