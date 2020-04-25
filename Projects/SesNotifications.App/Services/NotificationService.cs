@@ -20,13 +20,13 @@ namespace SesNotifications.App.Services
         private readonly ISesBouncesRepository _sesBouncesRepository;
         private readonly ISesComplaintsRepository _sesComplaintsRepository;
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
-        private readonly ILogger<NotificationsController> _logger;
+        private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
             ISesComplaintsRepository sesComplaintsRepository,
             ISesDeliveriesRepository sesDeliveriesRepository,
-            ILogger<NotificationsController> logger)
+            ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
