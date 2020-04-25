@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SesNotifications.App.Controllers;
 using SesNotifications.App.Factories;
 using SesNotifications.App.Models;
 using SesNotifications.App.Services.Interfaces;
