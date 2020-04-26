@@ -25,14 +25,15 @@ namespace SesNotifications.App
             services.AddScopedRepositories();
             ConfigureScopedRepositories(services);
 
-            services.AddMvcWithUnitOfWork(0);
+            services.AddMvcWithUnitOfWork(0);   //Note: this won't work with Razor pages.
 
-            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         public void ConfigureScopedRepositories(IServiceCollection services)
         {
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ISearchService, SearchService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -53,6 +54,8 @@ namespace SesNotifications.App
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
