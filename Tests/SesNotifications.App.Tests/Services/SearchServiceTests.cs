@@ -97,5 +97,19 @@ namespace SesNotifications.App.Tests.Services
 
             mockNotifications.Verify(x => x.FindBySentDateRange(It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Exactly(1));
         }
+
+        [Fact]
+        public void VerifyFindOneRaw()
+        {
+            var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
+            mockNotifications.Setup(x => x.FindById(1)).Returns(new SesNotification());
+            var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
+
+            var service = new SearchService(mockNotifications.Object, null, null, null, mockLogger.Object);
+
+            service.FindRaw(1);
+
+            mockNotifications.Verify(x => x.FindById(1), Times.Exactly(1));
+        }
     }
 }

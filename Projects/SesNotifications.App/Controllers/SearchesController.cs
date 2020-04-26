@@ -42,5 +42,19 @@ namespace SesNotifications.App.Controllers
         {
             return Ok(_searchService.FindRaw(start, end));
         }
+
+        [HttpGet]
+        [Route("{raw}/{id}/")]
+        public IActionResult FindRawById([FromRoute] long id)
+        {
+            return Ok(_searchService.FindRaw(id));
+        }
+
+        [HttpGet]
+        [Route("{raw}/{id}/text/")]
+        public IActionResult FindMessageById([FromRoute] long id)
+        {
+            return Ok(_searchService.FindRaw(id).Notification);
+        }
     }
 }

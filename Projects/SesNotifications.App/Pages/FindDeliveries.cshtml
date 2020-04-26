@@ -47,6 +47,8 @@
                 <th>SMTP Response</th>
                 <th>Reporting MTA</th>
                 <th>Remote MTA IP</th>
+                <th>Raw model</th>
+                <th>Raw message</th>
             </tr>
             @foreach (var record in Model.Deliveries)
             {
@@ -65,7 +67,9 @@
             <td>@record.SmtpResponse</td>
             <td>@record.ReportingMta</td>
             <td>@record.RemoteMtaIp</td>
-        </tr>
+            <td><a target="_blank" href="@Url.Action("FindRawById", "Searches", new {id = record.NotificationId})">RAW (MODEL)</a></td>
+            <td><a target="_blank" href="@string.Concat(Url.Action("FindMessageById", "Searches", new {id = record.NotificationId}), "/text")">RAW (MESSAGE)</a></td>
+            </tr>
             }
         </table>
     </div>

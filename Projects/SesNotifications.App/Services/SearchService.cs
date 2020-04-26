@@ -55,5 +55,10 @@ namespace SesNotifications.App.Services
         {
             return _notificationsRepository.FindBySentDateRange(start, end);
         }
+
+        public SesNotification FindRaw(long id)
+        {
+            return _notificationsRepository.FindById(id);
+        }
     }
 }
