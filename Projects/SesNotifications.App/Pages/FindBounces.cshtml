@@ -1,13 +1,13 @@
 ﻿@page
-@model SesNotifications.App.Pages.FindDeliveriesModel
+@model SesNotifications.App.Pages.FindBouncesModel
 @{
-    ViewData["Title"] = "Find deliveries";
+    ViewData["Title"] = "Find bounces";
 }
 
 <!DOCTYPE html>
 
 <h1>@ViewData["Title"]</h1>
-<h4>Search for deliveries by date range and optional recipient.</h4>
+<h4>Search for bounces by date range and optional recipient.</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -40,17 +40,19 @@
                 <th>Message ID</th>
                 <th>Source</th>
                 <th>Recipients</th>
+                <th>Bounce Type</th>
+                <th>Bounce Sub Type</th>
                 <th>Source ARN</th>
                 <th>Source IP</th>
                 <th>Sending Account ID</th>
-                <th>Delivered At</th>
-                <th>SMTP Response</th>
+                <th>Created At</th>
+                <th>FeedbackId</th>
                 <th>Reporting MTA</th>
                 <th>Remote MTA IP</th>
                 <th>Raw model</th>
                 <th>Raw message</th>
             </tr>
-            @foreach (var record in Model.Deliveries)
+            @foreach (var record in Model.Bounces)
             {
                 <tr>
                     <td>@record.Id</td>
@@ -59,12 +61,14 @@
                     <td>@record.SentAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
                     <td>@record.MessageId</td>
                     <td>@record.Source</td>
-                    <td>@record.Recipients</td>
+                    <td>@record.BouncedRecipients</td>
+                    <td>@record.BounceType</td>
+                    <td>@record.BounceSubType</td>
                     <td>@record.SourceArn</td>
                     <td>@record.SourceIp</td>
                     <td>@record.SendingAccountId</td>
-                    <td>@record.DeliveredAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
-                    <td>@record.SmtpResponse</td>
+                    <td>@record.CreatedAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
+                    <td>@record.FeedbackId</td>
                     <td>@record.ReportingMta</td>
                     <td>@record.RemoteMtaIp</td>
                     <td><a target="_blank" href="@Url.Action("FindRawById", "Searches", new {id = record.NotificationId})">RAW (MODEL)</a></td>
