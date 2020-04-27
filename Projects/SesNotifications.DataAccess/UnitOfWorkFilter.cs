@@ -2,13 +2,18 @@
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
-using NLog;
+using Microsoft.Extensions.Logging;
 
 namespace SesNotifications.DataAccess
 {
     public class UnitOfWorkFilter : IAsyncActionFilter
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<UnitOfWorkFilter> _logger;
+
+        public UnitOfWorkFilter(ILogger<UnitOfWorkFilter> logger)
+        {
+            _logger = logger;
+        }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -31,7 +36,7 @@ namespace SesNotifications.DataAccess
                 catch (Exception e)
                 {
                     SessionManager.Manager.RollbackTransaction();
-                    Logger.Error(e, "Transaction commit failed");
+                    _logger.LogError(e, "Transaction commit failed");
                 }
             }
             finally
