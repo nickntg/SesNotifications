@@ -2,6 +2,7 @@
 using FluentNHibernate.Cfg.Db;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Dialect;
+using SesNotifications.DataAccess.Entities;
 using SesNotifications.DataAccess.Mappings;
 using SesNotifications.DataAccess.Repositories;
 using SesNotifications.DataAccess.Repositories.Interfaces;
@@ -20,7 +21,8 @@ namespace SesNotifications.DataAccess
                     .Add<SesDeliveryMap>()
                     .Add<SesComplaintMap>()
                     .Add<SesNotificationMap>()
-                    .Add<SesBounceMap>())
+                    .Add<SesBounceMap>()
+                    .Add<SesOpenMap>())
                 .BuildSessionFactory();
 
             SessionManager.Build(sessionFactory);
@@ -42,6 +44,7 @@ namespace SesNotifications.DataAccess
             services.AddScoped<ISesBouncesRepository, SesBouncesRepository>();
             services.AddScoped<ISesDeliveriesRepository, SesDeliveriesRepository>();
             services.AddScoped<ISesComplaintsRepository, SesComplaintsRepository>();
+            services.AddScoped<ISesOpensRepository, SesOpensRepository>();
 
             return services;
         }

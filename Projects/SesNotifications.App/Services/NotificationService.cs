@@ -14,23 +14,27 @@ namespace SesNotifications.App.Services
         private const string Bounce = "bounce";
         private const string Delivery = "delivery";
         private const string Complaint = "complaint";
+        private const string Open = "open";
 
         private readonly INotificationsRepository _notificationsRepository;
         private readonly ISesBouncesRepository _sesBouncesRepository;
         private readonly ISesComplaintsRepository _sesComplaintsRepository;
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
+        private readonly ISesOpensRepository _sesOpensRepository;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
             ISesComplaintsRepository sesComplaintsRepository,
             ISesDeliveriesRepository sesDeliveriesRepository,
+            ISesOpensRepository sesOpensRepository,
             ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
             _sesComplaintsRepository = sesComplaintsRepository;
             _sesDeliveriesRepository = sesDeliveriesRepository;
+            _sesOpensRepository = sesOpensRepository;
             _logger = logger;
         }
 
@@ -52,19 +56,43 @@ namespace SesNotifications.App.Services
         private void HandleNotificationInternal(string content)
         {
             var ses = JsonConvert.DeserializeObject<Ses>(content);
-            switch (ses.NotificationType.ToLower())
+
+            if (ses == null || (string.IsNullOrEmpty(ses.NotificationType) && string.IsNullOrEmpty(ses.EventType)))
             {
-                case Delivery:
-                    HandleDelivery(content);
-                    break;
-                case Complaint:
-                    HandleComplaint(content);
-                    break;
-                case Bounce:
-                    HandleBounce(content);
-                    break;
-                default:
-                    throw new NotSupportedException($"Unsupported notification type {ses.NotificationType}");
+                throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
+            }
+
+            if (!string.IsNullOrEmpty(ses.NotificationType))
+            {
+                switch (ses.NotificationType.ToLower())
+                {
+                    case Delivery:
+                        HandleDelivery(content);
+                        break;
+                    case Complaint:
+                        HandleComplaint(content);
+                        break;
+                    case Bounce:
+                        HandleBounce(content);
+                        break;
+                    case Open:
+                        HandleOpen(content);
+                        break;
+                    default:
+                        throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(ses.EventType))
+            {
+                switch (ses.EventType.ToLower())
+                {
+                    case Open:
+                        HandleOpen(content);
+                        break;
+                    default:
+                        throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
+                }
             }
         }
 
@@ -93,6 +121,15 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(bounce.Mail, content);
 
             _sesBouncesRepository.Save(bounce.Create(notification.Id));
+        }
+
+        private void HandleOpen(string content)
+        {
+            var open = JsonConvert.DeserializeObject<SesOpenModel>(content);
+
+            var notification = SaveNotification(open.Mail, content);
+
+            _sesOpensRepository.Save(open.Create(notification.Id));
         }
 
         private SesNotification SaveNotification(SesMail mail, string content)

@@ -59,6 +59,21 @@ namespace SesNotifications.App.Tests.Helpers
             };
         }
 
+        public static SesOpenModel GetSesOpenModel(DateTime dt)
+        {
+            return new SesOpenModel
+            {
+                NotificationType = "Open",
+                Mail = GetSesMail(dt),
+                Open = new SesOpen
+                {
+                    UserAgent = "user_agent",
+                    IpAddress = "ip_address",
+                    Timestamp = dt.Iso8601()
+                }
+            };
+        }
+
         public static SesMail GetSesMail(DateTime dt)
         {
             return new SesMail
