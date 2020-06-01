@@ -8,12 +8,12 @@ using SesNotifications.DataAccess.Entities;
 
 namespace SesNotifications.App.Pages
 {
-    public class FindSendsModel : PageModel
+    public class FindOpenEventsModel : PageModel
     {
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public IList<SesSendEvent> Sends { get; set; } = new List<SesSendEvent>();
+        public IList<SesOpenEvent> OpenEvents { get; set; } = new List<SesOpenEvent>();
 
         public class InputModel
         {
@@ -30,14 +30,14 @@ namespace SesNotifications.App.Pages
 
         private readonly ISearchService _searchService;
 
-        public FindSendsModel(ISearchService searchService)
+        public FindOpenEventsModel(ISearchService searchService)
         {
             _searchService = searchService;
         }
 
         public IActionResult OnPost()
         {
-            Sends = _searchService.FindSends(Input.Email, Input.Start, Input.End);
+            OpenEvents = _searchService.FindOpenEvents(Input.Email, Input.Start, Input.End);
             return Page();
         }
     }

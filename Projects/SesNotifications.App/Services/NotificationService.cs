@@ -23,6 +23,7 @@ namespace SesNotifications.App.Services
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
         private readonly ISesOpensEventsRepository _sesOpensEventsRepository;
         private readonly ISesSendEventsRepository _sesSendEventsRepository;
+        private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
@@ -31,6 +32,7 @@ namespace SesNotifications.App.Services
             ISesDeliveriesRepository sesDeliveriesRepository,
             ISesOpensEventsRepository sesOpensEventsRepository,
             ISesSendEventsRepository sesSendEventsRepository,
+            ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -39,6 +41,8 @@ namespace SesNotifications.App.Services
             _sesDeliveriesRepository = sesDeliveriesRepository;
             _sesOpensEventsRepository = sesOpensEventsRepository;
             _sesSendEventsRepository = sesSendEventsRepository;
+            _sesDeliveriesRepository = sesDeliveriesRepository;
+            _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _logger = logger;
         }
 
@@ -89,15 +93,27 @@ namespace SesNotifications.App.Services
                 switch (ses.EventType.ToLower())
                 {
                     case Open:
-                        HandleOpen(content);
+                        HandleOpenEvent(content);
                         break;
                     case Send:
-                        HandleSend(content);
+                        HandleSendEvent(content);
+                        break;
+                    case Delivery:
+                        HandleDeliveryEvent(content);
                         break;
                     default:
                         throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
                 }
             }
+        }
+
+        private void HandleDeliveryEvent(string content)
+        {
+            var delivery = JsonConvert.DeserializeObject<SesDeliveryEventModel>(content);
+
+            var notification = SaveNotification(delivery.Mail, content);
+
+            _sesDeliveryEventsRepository.Save(delivery.Create(notification.Id));
         }
 
         private void HandleDelivery(string content)
@@ -127,18 +143,18 @@ namespace SesNotifications.App.Services
             _sesBouncesRepository.Save(bounce.Create(notification.Id));
         }
 
-        private void HandleOpen(string content)
+        private void HandleOpenEvent(string content)
         {
-            var open = JsonConvert.DeserializeObject<SesOpenModel>(content);
+            var open = JsonConvert.DeserializeObject<SesOpenEventModel>(content);
 
             var notification = SaveNotification(open.Mail, content);
 
             _sesOpensEventsRepository.Save(open.Create(notification.Id));
         }
 
-        private void HandleSend(string content)
+        private void HandleSendEvent(string content)
         {
-            var send = JsonConvert.DeserializeObject<SesSendModel>(content);
+            var send = JsonConvert.DeserializeObject<SesSendEventModel>(content);
 
             var notification = SaveNotification(send.Mail, content);
 

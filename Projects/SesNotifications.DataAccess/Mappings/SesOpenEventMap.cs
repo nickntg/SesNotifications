@@ -6,7 +6,7 @@ namespace SesNotifications.DataAccess.Mappings
     {
         public SesOpenEventMap()
         {
-            Table("ses_notifications.opens");
+            Table("ses_notifications.openevents");
             MapCommon();
             Map(x => x.Recipients).Column("recipients");
             Map(x => x.OpenedAt).Column("opened_at");

@@ -1,13 +1,13 @@
 ﻿@page
-@model SesNotifications.App.Pages.FindSendsModel
+@model SesNotifications.App.Pages.FindSendEventsModel
 @{
-    ViewData["Title"] = "Find sends";
+    ViewData["Title"] = "Find send events";
 }
 
 <!DOCTYPE html>
 
 <h1>@ViewData["Title"]</h1>
-<h4>Search for sends by date range and optional recipient.</h4>
+<h4>Search for send events by date range and optional recipient.</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -46,7 +46,7 @@
                 <th>FeedbackId</th>
                 <th>Reporting MTA</th>
             </tr>
-            @foreach (var record in Model.Sends)
+            @foreach (var record in Model.SendEvents)
             {
                 <tr>
                     <td>@record.Id</td>

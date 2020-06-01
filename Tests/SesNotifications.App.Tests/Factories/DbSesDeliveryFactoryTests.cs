@@ -20,7 +20,6 @@ namespace SesNotifications.App.Tests.Factories
             Assert.Equal(sesDelivery.DeliveredAt.Iso8601(), dt.Iso8601());
             Assert.Equal(sesDelivery.SentAt.Iso8601(), dt.Iso8601());
             Assert.Equal(sesDelivery.SendingAccountId, delivery.Mail.SendingAccountId);
-            Assert.Equal(sesDelivery.RemoteMtaIp, delivery.Delivery.RemoteMtaIp);
             Assert.Equal(sesDelivery.ReportingMta, delivery.Delivery.ReportingMta);
             Assert.Equal(sesDelivery.SourceArn, delivery.Mail.SourceArn);
             Assert.Equal(sesDelivery.Source, delivery.Mail.Source);

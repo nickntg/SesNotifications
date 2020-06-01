@@ -1,6 +1,6 @@
 ﻿namespace SesNotifications.App.Models
 {
-    public class SesOpen
+    public class SesOpenEvent
     {
         public virtual string Timestamp { get; set; }
         public virtual string UserAgent { get; set; }

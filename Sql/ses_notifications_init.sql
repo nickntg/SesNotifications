@@ -1,4 +1,29 @@
 CREATE SCHEMA ses_notifications AUTHORIZATION postgres;
+
+CREATE TABLE ses_notifications.deliveryevents (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	notification_id int8 NOT NULL,
+	notification_type varchar(32) NOT NULL,
+	sent_at timestamptz NOT NULL,
+	message_id varchar(128) NOT NULL,
+	source varchar(256) NOT NULL COLLATE "ucs_basic",
+	source_arn varchar(256) NULL,
+	source_ip varchar(32) NULL,
+	sending_account_id varchar(128) NULL,
+	delivered_at timestamptz NULL,
+	smtp_response varchar(256) NULL COLLATE "ucs_basic",
+	reporting_mta varchar(256) NULL,
+	recipients varchar(64000) NULL COLLATE "ucs_basic"
+);
+CREATE INDEX deliveryevents_delivered_at_idx ON ses_notifications.deliveryevents (delivered_at);
+CREATE INDEX deliveryevents_from_idx ON ses_notifications.deliveryevents (source);
+CREATE UNIQUE INDEX deliveryevents_id_idx ON ses_notifications.deliveryevents (id);
+CREATE INDEX deliveryevents_message_id_idx ON ses_notifications.deliveryevents (message_id);
+CREATE INDEX deliveryevents_notification_id_idx ON ses_notifications.deliveryevents (notification_id);
+CREATE INDEX deliveryevents_recipients_idx ON ses_notifications.deliveryevents (recipients);
+CREATE INDEX deliveryevents_sent_at_idx ON ses_notifications.deliveryevents (sent_at);
+CREATE INDEX deliveryevents_smtp_response_idx ON ses_notifications.deliveryevents (smtp_response);
+
 CREATE TABLE ses_notifications.openevents (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	notification_id int8 NOT NULL,

@@ -5,6 +5,21 @@ namespace SesNotifications.App.Tests.Helpers
 {
     public class TestHelpers
     {
+        public static SesOpenEventModel GetOpenEventModel(DateTime dt)
+        {
+            return new SesOpenEventModel
+            {
+                EventType = "Open",
+                Mail = GetSesMail(dt),
+                Open = new SesOpenEvent
+                {
+                    UserAgent = "user agent",
+                    IpAddress = "ip_address",
+                    Timestamp = dt.Iso8601()
+                }
+            };
+        }
+
         public static SesDeliveryModel GetSesDeliveryModel(DateTime dt)
         {
             return new SesDeliveryModel
@@ -16,6 +31,22 @@ namespace SesNotifications.App.Tests.Helpers
                     Recipients = new[] {"recipient_1"},
                     ReportingMta = "mta",
                     RemoteMtaIp = "mta_ip",
+                    SmtpResponse = "response",
+                    Timestamp = dt.Iso8601()
+                }
+            };
+        }
+
+        public static SesDeliveryEventModel GetSesDeliveryEventModel(DateTime dt)
+        {
+            return new SesDeliveryEventModel
+            {
+                EventType = "Delivery",
+                Mail = GetSesMail(dt),
+                Delivery = new SesDeliveryEvent
+                {
+                    Recipients = new[] { "recipient_1" },
+                    ReportingMta = "mta",
                     SmtpResponse = "response",
                     Timestamp = dt.Iso8601()
                 }
@@ -59,18 +90,28 @@ namespace SesNotifications.App.Tests.Helpers
             };
         }
 
-        public static SesOpenModel GetSesOpenModel(DateTime dt)
+        public static SesOpenEventModel GetSesOpenModel(DateTime dt)
         {
-            return new SesOpenModel
+            return new SesOpenEventModel
             {
-                NotificationType = "Open",
+                EventType = "Open",
                 Mail = GetSesMail(dt),
-                Open = new SesOpen
+                Open = new SesOpenEvent
                 {
                     UserAgent = "user_agent",
                     IpAddress = "ip_address",
                     Timestamp = dt.Iso8601()
                 }
+            };
+        }
+
+        public static SesSendEventModel GetSesSendModel(DateTime dt)
+        {
+            return new SesSendEventModel
+            {
+                EventType = "Send",
+                Mail = GetSesMail(dt),
+                Send = new SesSendEvent()
             };
         }
 

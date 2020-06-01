@@ -6,7 +6,7 @@ namespace SesNotifications.DataAccess.Mappings
     {
         public SesSendEventMap()
         {
-            Table("ses_notifications.sends");
+            Table("ses_notifications.sendevents");
             MapCommon();
             Map(x => x.Recipients).Column("recipients");
         }

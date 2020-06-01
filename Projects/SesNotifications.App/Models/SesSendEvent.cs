@@ -1,6 +1,6 @@
 ﻿namespace SesNotifications.App.Models
 {
-    public class SesSend
+    public class SesSendEvent
     {
     }
 }

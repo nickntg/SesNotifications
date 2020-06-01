@@ -1,13 +1,13 @@
 ﻿@page
-@model SesNotifications.App.Pages.FindOpensModel
+@model SesNotifications.App.Pages.FindOpenEventsModel
 @{
-    ViewData["Title"] = "Find opens";
+    ViewData["Title"] = "Find open events";
 }
 
 <!DOCTYPE html>
 
 <h1>@ViewData["Title"]</h1>
-<h4>Search for opens by date range and optional recipient.</h4>
+<h4>Search for open events by date range and optional recipient.</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -49,7 +49,7 @@
                 <th>User Agent</th>
                 <th>IP Address</th>
             </tr>
-            @foreach (var record in Model.Opens)
+            @foreach (var record in Model.OpenEvents)
             {
                 <tr>
                     <td>@record.Id</td>

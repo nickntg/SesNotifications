@@ -17,6 +17,7 @@ namespace SesNotifications.App.Services
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
         private readonly ISesOpensEventsRepository _sesOpensEventsRepository;
         private readonly ISesSendEventsRepository _sesSendEventsRepository;
+        private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ILogger<SearchService> _logger;
 
         public SearchService(INotificationsRepository notificationsRepository,
@@ -25,6 +26,7 @@ namespace SesNotifications.App.Services
             ISesDeliveriesRepository sesDeliveriesRepository,
             ISesOpensEventsRepository sesOpensEventsRepository,
             ISesSendEventsRepository sesSendEventsRepository,
+            ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ILogger<SearchService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -33,6 +35,7 @@ namespace SesNotifications.App.Services
             _sesDeliveriesRepository = sesDeliveriesRepository;
             _sesOpensEventsRepository = sesOpensEventsRepository;
             _sesSendEventsRepository = sesSendEventsRepository;
+            _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _logger = logger;
         }
 
@@ -57,18 +60,25 @@ namespace SesNotifications.App.Services
                 : _sesBouncesRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
-        public IList<SesOpenEvent> FindOpens(string email, DateTime start, DateTime end)
+        public IList<SesOpenEvent> FindOpenEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesOpensEventsRepository.FindBySentDateRange(start, end)
                 : _sesOpensEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
-        public IList<SesSendEvent> FindSends(string email, DateTime start, DateTime end)
+        public IList<SesSendEvent> FindSendEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesSendEventsRepository.FindBySentDateRange(start, end)
                 : _sesSendEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+        }
+
+        public IList<SesDeliveryEvent> FindDeliveryEvents(string email, DateTime start, DateTime end)
+        {
+            return string.IsNullOrEmpty(email)
+                ? _sesDeliveryEventsRepository.FindBySentDateRange(start, end)
+                : _sesDeliveryEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
         public IList<SesNotification> FindRaw(DateTime start, DateTime end)
