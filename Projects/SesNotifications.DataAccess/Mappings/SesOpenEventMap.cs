@@ -2,9 +2,9 @@
 
 namespace SesNotifications.DataAccess.Mappings
 {
-    public class SesOpenMap : SesCommonMap<SesOpen>
+    public class SesOpenEventMap : SesCommonMap<SesOpenEvent>
     {
-        public SesOpenMap()
+        public SesOpenEventMap()
         {
             Table("ses_notifications.opens");
             MapCommon();

@@ -13,7 +13,7 @@ namespace SesNotifications.App.Pages
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public IList<SesSend> Bounces { get; set; } = new List<SesSend>();
+        public IList<SesSendEvent> Sends { get; set; } = new List<SesSendEvent>();
 
         public class InputModel
         {
@@ -37,7 +37,7 @@ namespace SesNotifications.App.Pages
 
         public IActionResult OnPost()
         {
-            Bounces = _searchService.FindSends(Input.Email, Input.Start, Input.End);
+            Sends = _searchService.FindSends(Input.Email, Input.Start, Input.End);
             return Page();
         }
     }

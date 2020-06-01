@@ -1,14 +1,14 @@
 ﻿using System;
 using SesNotifications.App.Models;
-using SesOpen = SesNotifications.DataAccess.Entities.SesOpen;
+using SesNotifications.DataAccess.Entities;
 
 namespace SesNotifications.App.Factories
 {
     public static class DbSesOpenFactory
     {
-        public static SesOpen Create(this SesOpenModel open, long notificationId)
+        public static SesOpenEvent Create(this SesOpenModel open, long notificationId)
         {
-            return new SesOpen
+            return new SesOpenEvent
             {
                 Id = notificationId,
                 NotificationId = notificationId,

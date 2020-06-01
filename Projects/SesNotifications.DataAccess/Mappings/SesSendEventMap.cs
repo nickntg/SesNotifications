@@ -2,9 +2,9 @@
 
 namespace SesNotifications.DataAccess.Mappings
 {
-    public class SesSendMap : SesCommonMap<SesSend>
+    public class SesSendEventMap : SesCommonMap<SesSendEvent>
     {
-        public SesSendMap()
+        public SesSendEventMap()
         {
             Table("ses_notifications.sends");
             MapCommon();

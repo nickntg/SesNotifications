@@ -72,11 +72,11 @@ namespace SesNotifications.App.Tests.Services
         public void VerifyOpens()
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
-            var mockSesOpens = new Mock<ISesOpensRepository>(MockBehavior.Strict);
+            var mockSesOpens = new Mock<ISesOpensEventsRepository>(MockBehavior.Strict);
             var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
-            mockSesOpens.Setup(x => x.Save(It.IsAny<SesOpen>()));
+            mockSesOpens.Setup(x => x.Save(It.IsAny<SesOpenEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
                 mockSesOpens.Object, null, mockLogger.Object);
@@ -84,18 +84,18 @@ namespace SesNotifications.App.Tests.Services
             service.HandleNotification(Open);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
-            mockSesOpens.Verify(x => x.Save(It.IsAny<SesOpen>()), Times.Exactly(1));
+            mockSesOpens.Verify(x => x.Save(It.IsAny<SesOpenEvent>()), Times.Exactly(1));
         }
 
         [Fact]
         public void VerifySends()
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
-            var mockSesSends = new Mock<ISesSendsRepository>(MockBehavior.Strict);
+            var mockSesSends = new Mock<ISesSendEventsRepository>(MockBehavior.Strict);
             var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
-            mockSesSends.Setup(x => x.Save(It.IsAny<SesSend>()));
+            mockSesSends.Setup(x => x.Save(It.IsAny<SesSendEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
                 null, mockSesSends.Object,mockLogger.Object);
@@ -103,7 +103,7 @@ namespace SesNotifications.App.Tests.Services
             service.HandleNotification(Send);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
-            mockSesSends.Verify(x => x.Save(It.IsAny<SesSend>()), Times.Exactly(1));
+            mockSesSends.Verify(x => x.Save(It.IsAny<SesSendEvent>()), Times.Exactly(1));
         }
 
         [Fact]

@@ -2,7 +2,7 @@
 
 namespace SesNotifications.DataAccess.Entities
 {
-    public class SesOpen : SesCommon
+    public class SesOpenEvent : SesCommon
     {
         public virtual string Recipients { get; set; }
         public virtual DateTime OpenedAt { get; set; }

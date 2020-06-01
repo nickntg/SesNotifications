@@ -1,5 +1,5 @@
 CREATE SCHEMA ses_notifications AUTHORIZATION postgres;
-CREATE TABLE ses_notifications.opens (
+CREATE TABLE ses_notifications.openevents (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	notification_id int8 NOT NULL,
 	notification_type varchar(32) NOT NULL,
@@ -14,14 +14,14 @@ CREATE TABLE ses_notifications.opens (
 	user_agent varchar(1024) NULL,
 	ip_address varchar(32) NULL
 );
-CREATE INDEX opens_recipients_idx ON ses_notifications.opens USING btree (recipients);
-CREATE INDEX opens_from_idx ON ses_notifications.opens USING btree (source);
-CREATE UNIQUE INDEX opens_id_idx ON ses_notifications.opens USING btree (id);
-CREATE INDEX opens_message_id_idx ON ses_notifications.opens USING btree (message_id);
-CREATE INDEX opens_notification_id_idx ON ses_notifications.opens USING btree (notification_id);
-CREATE INDEX opens_sent_at_idx ON ses_notifications.opens USING btree (sent_at);
+CREATE INDEX openevents_recipients_idx ON ses_notifications.openevents USING btree (recipients);
+CREATE INDEX openevents_from_idx ON ses_notifications.openevents USING btree (source);
+CREATE UNIQUE INDEX openevents_id_idx ON ses_notifications.openevents USING btree (id);
+CREATE INDEX openevents_message_id_idx ON ses_notifications.openevents USING btree (message_id);
+CREATE INDEX openevents_notification_id_idx ON ses_notifications.openevents USING btree (notification_id);
+CREATE INDEX openevents_sent_at_idx ON ses_notifications.openevents USING btree (sent_at);
 
-CREATE TABLE ses_notifications.sends (
+CREATE TABLE ses_notifications.sendevents (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	notification_id int8 NOT NULL,
 	notification_type varchar(32) NOT NULL,
@@ -33,11 +33,11 @@ CREATE TABLE ses_notifications.sends (
 	sending_account_id varchar(128) NULL,
 	recipients varchar(64000) NULL COLLATE "ucs_basic"
 );
-CREATE INDEX sends_recipients_idx ON ses_notifications.sends USING btree (recipients);
-CREATE INDEX sends_from_idx ON ses_notifications.sends USING btree (source);
-CREATE UNIQUE INDEX sends_id_idx ON ses_notifications.sends USING btree (id);
-CREATE INDEX sends_message_id_idx ON ses_notifications.sends USING btree (message_id);
-CREATE INDEX sends_notification_id_idx ON ses_notifications.sends USING btree (notification_id);
+CREATE INDEX sendevents_recipients_idx ON ses_notifications.sendevents USING btree (recipients);
+CREATE INDEX sendevents_from_idx ON ses_notifications.sendevents USING btree (source);
+CREATE UNIQUE INDEX sendevents_id_idx ON ses_notifications.sendevents USING btree (id);
+CREATE INDEX sendevents_message_id_idx ON ses_notifications.sendevents USING btree (message_id);
+CREATE INDEX sendevents_notification_id_idx ON ses_notifications.sendevents USING btree (notification_id);
 
 CREATE TABLE ses_notifications.bounces (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,

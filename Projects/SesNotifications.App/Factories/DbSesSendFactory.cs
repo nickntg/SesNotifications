@@ -1,14 +1,14 @@
 ﻿using System;
 using SesNotifications.App.Models;
-using SesSend = SesNotifications.DataAccess.Entities.SesSend;
+using SesNotifications.DataAccess.Entities;
 
 namespace SesNotifications.App.Factories
 {
     public static class DbSesSendFactory
     {
-        public static SesSend Create(this SesSendModel open, long notificationId)
+        public static SesSendEvent Create(this SesSendModel open, long notificationId)
         {
-            return new SesSend
+            return new SesSendEvent
             {
                 Id = notificationId,
                 NotificationId = notificationId,

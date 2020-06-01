@@ -21,24 +21,24 @@ namespace SesNotifications.App.Services
         private readonly ISesBouncesRepository _sesBouncesRepository;
         private readonly ISesComplaintsRepository _sesComplaintsRepository;
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
-        private readonly ISesOpensRepository _sesOpensRepository;
-        private readonly ISesSendsRepository _sesSendsRepository;
+        private readonly ISesOpensEventsRepository _sesOpensEventsRepository;
+        private readonly ISesSendEventsRepository _sesSendEventsRepository;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
             ISesComplaintsRepository sesComplaintsRepository,
             ISesDeliveriesRepository sesDeliveriesRepository,
-            ISesOpensRepository sesOpensRepository,
-            ISesSendsRepository sesSendsRepository,
+            ISesOpensEventsRepository sesOpensEventsRepository,
+            ISesSendEventsRepository sesSendEventsRepository,
             ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
             _sesComplaintsRepository = sesComplaintsRepository;
             _sesDeliveriesRepository = sesDeliveriesRepository;
-            _sesOpensRepository = sesOpensRepository;
-            _sesSendsRepository = sesSendsRepository;
+            _sesOpensEventsRepository = sesOpensEventsRepository;
+            _sesSendEventsRepository = sesSendEventsRepository;
             _logger = logger;
         }
 
@@ -133,7 +133,7 @@ namespace SesNotifications.App.Services
 
             var notification = SaveNotification(open.Mail, content);
 
-            _sesOpensRepository.Save(open.Create(notification.Id));
+            _sesOpensEventsRepository.Save(open.Create(notification.Id));
         }
 
         private void HandleSend(string content)
@@ -142,7 +142,7 @@ namespace SesNotifications.App.Services
 
             var notification = SaveNotification(send.Mail, content);
 
-            _sesSendsRepository.Save(send.Create(notification.Id));
+            _sesSendEventsRepository.Save(send.Create(notification.Id));
         }
 
         private SesNotification SaveNotification(SesMail mail, string content)
