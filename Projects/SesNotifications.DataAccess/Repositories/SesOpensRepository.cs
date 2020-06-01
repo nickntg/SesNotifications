@@ -18,9 +18,9 @@ namespace SesNotifications.DataAccess.Repositories
         {
         }
 
-        public void Save(SesOpen sesDelivery)
+        public void Save(SesOpen sesOpen)
         {
-            Session.Save(sesDelivery);
+            Session.Save(sesOpen);
         }
 
         public SesOpen FindById(long id)

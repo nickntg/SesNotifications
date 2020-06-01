@@ -1,0 +1,68 @@
+﻿@page
+@model SesNotifications.App.Pages.FindSendsModel
+@{
+    ViewData["Title"] = "Find sends";
+}
+
+<!DOCTYPE html>
+
+<h1>@ViewData["Title"]</h1>
+<h4>Search for sends by date range and optional recipient.</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label>Starting date</label>
+                <input asp-for="Input.Start" class="form-control" />
+                <span asp-validation-for="Input.Start" class="text-danger"></span>
+
+                <label>Ending date</label>
+                <input asp-for="Input.End" class="form-control" />
+                <span asp-validation-for="Input.End" class="text-danger"></span>
+
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <br />
+
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>Notification ID</th>
+                <th>Notification Type</th>
+                <th>Sent at</th>
+                <th>Message ID</th>
+                <th>Source</th>
+                <th>Recipients</th>
+                <th>Source ARN</th>
+                <th>Source IP</th>
+                <th>Sending Account ID</th>
+                <th>FeedbackId</th>
+                <th>Reporting MTA</th>
+            </tr>
+            @foreach (var record in Model.Bounces)
+            {
+                <tr>
+                    <td>@record.Id</td>
+                    <td>@record.NotificationId</td>
+                    <td>@record.NotificationType</td>
+                    <td>@record.SentAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
+                    <td>@record.MessageId</td>
+                    <td>@record.Source</td>
+                    <td>@record.Recipients</td>
+                    <td>@record.SourceArn</td>
+                    <td>@record.SourceIp</td>
+                    <td>@record.SendingAccountId</td>
+                    <td><a target="_blank" href="@Url.Action("FindRawById", "Searches", new {id = record.NotificationId})">RAW (MODEL)</a></td>
+                    <td><a target="_blank" href="@string.Concat(Url.Action("FindMessageById", "Searches", new {id = record.NotificationId}), "/text")">RAW (MESSAGE)</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

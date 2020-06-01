@@ -16,6 +16,7 @@ namespace SesNotifications.App.Services
         private readonly ISesComplaintsRepository _sesComplaintsRepository;
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
         private readonly ISesOpensRepository _sesOpensRepository;
+        private readonly ISesSendsRepository _sesSendsRepository;
         private readonly ILogger<SearchService> _logger;
 
         public SearchService(INotificationsRepository notificationsRepository,
@@ -23,6 +24,7 @@ namespace SesNotifications.App.Services
             ISesComplaintsRepository sesComplaintsRepository,
             ISesDeliveriesRepository sesDeliveriesRepository,
             ISesOpensRepository sesOpensRepository,
+            ISesSendsRepository sesSendsRepository,
             ILogger<SearchService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -30,6 +32,7 @@ namespace SesNotifications.App.Services
             _sesComplaintsRepository = sesComplaintsRepository;
             _sesDeliveriesRepository = sesDeliveriesRepository;
             _sesOpensRepository = sesOpensRepository;
+            _sesSendsRepository = sesSendsRepository;
             _logger = logger;
         }
 
@@ -59,6 +62,13 @@ namespace SesNotifications.App.Services
             return string.IsNullOrEmpty(email)
                 ? _sesOpensRepository.FindBySentDateRange(start, end)
                 : _sesOpensRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+        }
+
+        public IList<SesSend> FindSends(string email, DateTime start, DateTime end)
+        {
+            return string.IsNullOrEmpty(email)
+                ? _sesSendsRepository.FindBySentDateRange(start, end)
+                : _sesSendsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
         public IList<SesNotification> FindRaw(DateTime start, DateTime end)

@@ -15,12 +15,14 @@ namespace SesNotifications.App.Services
         private const string Delivery = "delivery";
         private const string Complaint = "complaint";
         private const string Open = "open";
+        private const string Send = "send";
 
         private readonly INotificationsRepository _notificationsRepository;
         private readonly ISesBouncesRepository _sesBouncesRepository;
         private readonly ISesComplaintsRepository _sesComplaintsRepository;
         private readonly ISesDeliveriesRepository _sesDeliveriesRepository;
         private readonly ISesOpensRepository _sesOpensRepository;
+        private readonly ISesSendsRepository _sesSendsRepository;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
@@ -28,6 +30,7 @@ namespace SesNotifications.App.Services
             ISesComplaintsRepository sesComplaintsRepository,
             ISesDeliveriesRepository sesDeliveriesRepository,
             ISesOpensRepository sesOpensRepository,
+            ISesSendsRepository sesSendsRepository,
             ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -35,6 +38,7 @@ namespace SesNotifications.App.Services
             _sesComplaintsRepository = sesComplaintsRepository;
             _sesDeliveriesRepository = sesDeliveriesRepository;
             _sesOpensRepository = sesOpensRepository;
+            _sesSendsRepository = sesSendsRepository;
             _logger = logger;
         }
 
@@ -75,9 +79,6 @@ namespace SesNotifications.App.Services
                     case Bounce:
                         HandleBounce(content);
                         break;
-                    case Open:
-                        HandleOpen(content);
-                        break;
                     default:
                         throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
                 }
@@ -89,6 +90,9 @@ namespace SesNotifications.App.Services
                 {
                     case Open:
                         HandleOpen(content);
+                        break;
+                    case Send:
+                        HandleSend(content);
                         break;
                     default:
                         throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
@@ -130,6 +134,15 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(open.Mail, content);
 
             _sesOpensRepository.Save(open.Create(notification.Id));
+        }
+
+        private void HandleSend(string content)
+        {
+            var send = JsonConvert.DeserializeObject<SesSendModel>(content);
+
+            var notification = SaveNotification(send.Mail, content);
+
+            _sesSendsRepository.Save(send.Create(notification.Id));
         }
 
         private SesNotification SaveNotification(SesMail mail, string content)

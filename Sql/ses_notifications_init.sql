@@ -21,6 +21,24 @@ CREATE INDEX opens_message_id_idx ON ses_notifications.opens USING btree (messag
 CREATE INDEX opens_notification_id_idx ON ses_notifications.opens USING btree (notification_id);
 CREATE INDEX opens_sent_at_idx ON ses_notifications.opens USING btree (sent_at);
 
+CREATE TABLE ses_notifications.sends (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	notification_id int8 NOT NULL,
+	notification_type varchar(32) NOT NULL,
+	sent_at timestamptz NOT NULL,
+	message_id varchar(128) NOT NULL,
+	source varchar(256) NOT NULL COLLATE "ucs_basic",
+	source_arn varchar(256) NULL,
+	source_ip varchar(32) NULL,
+	sending_account_id varchar(128) NULL,
+	recipients varchar(64000) NULL COLLATE "ucs_basic"
+);
+CREATE INDEX sends_recipients_idx ON ses_notifications.sends USING btree (recipients);
+CREATE INDEX sends_from_idx ON ses_notifications.sends USING btree (source);
+CREATE UNIQUE INDEX sends_id_idx ON ses_notifications.sends USING btree (id);
+CREATE INDEX sends_message_id_idx ON ses_notifications.sends USING btree (message_id);
+CREATE INDEX sends_notification_id_idx ON ses_notifications.sends USING btree (notification_id);
+
 CREATE TABLE ses_notifications.bounces (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	notification_id int8 NOT NULL,
