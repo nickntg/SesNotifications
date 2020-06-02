@@ -11,7 +11,7 @@ CREATE TABLE ses_notifications.deliveryevents (
 	source_ip varchar(32) NULL,
 	sending_account_id varchar(128) NULL,
 	delivered_at timestamptz NULL,
-	smtp_response varchar(256) NULL COLLATE "ucs_basic",
+	smtp_response varchar(4000) NULL COLLATE "ucs_basic",
 	reporting_mta varchar(256) NULL,
 	recipients varchar(64000) NULL COLLATE "ucs_basic"
 );
@@ -131,7 +131,7 @@ CREATE TABLE ses_notifications.deliveries (
 	source_ip varchar(32) NULL,
 	sending_account_id varchar(128) NULL,
 	delivered_at timestamptz NULL,
-	smtp_response varchar(256) NULL COLLATE "ucs_basic",
+	smtp_response varchar(4000) NULL COLLATE "ucs_basic",
 	reporting_mta varchar(256) NULL,
 	remote_mta_ip varchar(32) NULL,
 	recipients varchar(64000) NULL COLLATE "ucs_basic"
