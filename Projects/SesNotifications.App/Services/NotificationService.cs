@@ -24,6 +24,7 @@ namespace SesNotifications.App.Services
         private readonly ISesOpensEventsRepository _sesOpensEventsRepository;
         private readonly ISesSendEventsRepository _sesSendEventsRepository;
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
+        private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
@@ -33,6 +34,7 @@ namespace SesNotifications.App.Services
             ISesOpensEventsRepository sesOpensEventsRepository,
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
+            ISesBounceEventsRepository sesBounceEventsRepository,
             ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -43,6 +45,7 @@ namespace SesNotifications.App.Services
             _sesSendEventsRepository = sesSendEventsRepository;
             _sesDeliveriesRepository = sesDeliveriesRepository;
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
+            _sesBounceEventsRepository = sesBounceEventsRepository;
             _logger = logger;
         }
 
@@ -101,10 +104,22 @@ namespace SesNotifications.App.Services
                     case Delivery:
                         HandleDeliveryEvent(content);
                         break;
+                    case Bounce:
+                        HandleBounceEvent(content);
+                        break;
                     default:
                         throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
                 }
             }
+        }
+
+        private void HandleBounceEvent(string content)
+        {
+            var bounceEvent = JsonConvert.DeserializeObject<SesBounceEventModel>(content);
+
+            var notification = SaveNotification(bounceEvent.Mail, content);
+
+            _sesBounceEventsRepository.Save(bounceEvent.Create(notification.Id));
         }
 
         private void HandleDeliveryEvent(string content)

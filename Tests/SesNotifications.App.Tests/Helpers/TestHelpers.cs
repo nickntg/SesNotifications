@@ -90,6 +90,24 @@ namespace SesNotifications.App.Tests.Helpers
             };
         }
 
+        public static SesBounceEventModel GetSesBounceEventModel(DateTime dt)
+        {
+            return new SesBounceEventModel
+            {
+                NotificationType = "Bounce",
+                Mail = GetSesMail(dt),
+                Bounce = new SesBounceEvent
+                {
+                    BouncedRecipients = new[] { new SesBouncedRecipient { EmailAddress = "address" } },
+                    ReportingMta = null,
+                    BounceSubType = "bounce_sub_type",
+                    Timestamp = dt.Iso8601(),
+                    FeedbackId = "feedback_id",
+                    BounceType = "bounce_type"
+                }
+            };
+        }
+
         public static SesOpenEventModel GetSesOpenModel(DateTime dt)
         {
             return new SesOpenEventModel

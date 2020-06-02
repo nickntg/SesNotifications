@@ -18,6 +18,7 @@ namespace SesNotifications.App.Services
         private readonly ISesOpensEventsRepository _sesOpensEventsRepository;
         private readonly ISesSendEventsRepository _sesSendEventsRepository;
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
+        private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
         private readonly ILogger<SearchService> _logger;
 
         public SearchService(INotificationsRepository notificationsRepository,
@@ -27,6 +28,7 @@ namespace SesNotifications.App.Services
             ISesOpensEventsRepository sesOpensEventsRepository,
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
+            ISesBounceEventsRepository sesBounceEventsRepository,
             ILogger<SearchService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -36,6 +38,7 @@ namespace SesNotifications.App.Services
             _sesOpensEventsRepository = sesOpensEventsRepository;
             _sesSendEventsRepository = sesSendEventsRepository;
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
+            _sesBounceEventsRepository = sesBounceEventsRepository;
             _logger = logger;
         }
 
@@ -79,6 +82,13 @@ namespace SesNotifications.App.Services
             return string.IsNullOrEmpty(email)
                 ? _sesDeliveryEventsRepository.FindBySentDateRange(start, end)
                 : _sesDeliveryEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+        }
+
+        public IList<SesBounceEvent> FindBounceEventsEvents(string email, DateTime start, DateTime end)
+        {
+            return string.IsNullOrEmpty(email)
+                ? _sesBounceEventsRepository.FindBySentDateRange(start, end)
+                : _sesBounceEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
         public IList<SesNotification> FindRaw(DateTime start, DateTime end)

@@ -25,7 +25,7 @@ namespace SesNotifications.App.Tests.Services
             var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(null, null, null, mockSesDeliveries.Object, null, null, null,
-                mockLogger.Object);
+                null, mockLogger.Object);
 
             service.FindDeliveries(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -50,7 +50,7 @@ namespace SesNotifications.App.Tests.Services
             var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(null, mockSesBounces.Object, null, null, null, null, null,
-                mockLogger.Object);
+                null, mockLogger.Object);
 
             service.FindBounces(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -75,7 +75,7 @@ namespace SesNotifications.App.Tests.Services
             var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(null, null, mockSesComplaints.Object, null, null, null, null,
-                mockLogger.Object);
+                null, mockLogger.Object);
 
             service.FindComplaints(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -95,7 +95,7 @@ namespace SesNotifications.App.Tests.Services
             var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(mockNotifications.Object, null, null, null, null, null, null,
-                mockLogger.Object);
+                null, mockLogger.Object);
 
             service.FindRaw(DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -110,7 +110,7 @@ namespace SesNotifications.App.Tests.Services
             var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(mockNotifications.Object, null, null, null, null, null, null,
-                mockLogger.Object);
+                null, mockLogger.Object);
 
             service.FindRaw(1);
 
