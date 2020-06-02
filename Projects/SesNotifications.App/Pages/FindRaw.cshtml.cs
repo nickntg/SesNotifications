@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SesNotifications.App.Helpers;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 
@@ -35,7 +36,7 @@ namespace SesNotifications.App.Pages
 
         public IActionResult OnPost()
         {
-            Raw = _searchService.FindRaw(Input.Start, Input.End);
+            Raw = _searchService.FindRaw(Input.Start.StartOfDay(), Input.End.EndOfDay());
             return Page();
         }
     }

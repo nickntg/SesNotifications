@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SesNotifications.App.Helpers;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 
@@ -37,7 +38,7 @@ namespace SesNotifications.App.Pages
 
         public IActionResult OnPost()
         {
-            BounceEvents = _searchService.FindBounceEvents(Input.Email, Input.Start, Input.End);
+            BounceEvents = _searchService.FindBounceEvents(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay());
             return Page();
         }
     }
