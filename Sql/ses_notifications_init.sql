@@ -1,5 +1,33 @@
 CREATE SCHEMA ses_notifications AUTHORIZATION postgres;
 
+CREATE TABLE ses_notifications.bounceevents (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	notification_id int8 NOT NULL,
+	notification_type varchar(32) NOT NULL,
+	sent_at timestamptz NOT NULL,
+	message_id varchar(128) NOT NULL,
+	source varchar(256) NOT NULL COLLATE "ucs_basic",
+	source_arn varchar(256) NULL,
+	source_ip varchar(32) NULL,
+	sending_account_id varchar(128) NULL,
+	bounce_type varchar(128) NOT NULL,
+	bounce_sub_type varchar(128) NOT NULL,
+	created_at timestamptz NULL,
+	feedback_id varchar(256) NULL,
+	reporting_mta varchar(256) NULL,
+	remote_mta_ip varchar(32) NULL,
+	bounced_recipients varchar(64000) NULL COLLATE "ucs_basic"
+);
+CREATE INDEX bounceevents_bounce_sub_type_idx ON ses_notifications.bounceevents USING btree (bounce_sub_type);
+CREATE INDEX bounceevents_bounce_type_idx ON ses_notifications.bounceevents USING btree (bounce_type);
+CREATE INDEX bounceevents_bounced_recipients_idx ON ses_notifications.bounceevents USING btree (bounced_recipients);
+CREATE INDEX bounceevents_created_at_idx ON ses_notifications.bounceevents USING btree (created_at);
+CREATE INDEX bounceevents_from_idx ON ses_notifications.bounceevents USING btree (source);
+CREATE UNIQUE INDEX bounceevents_id_idx ON ses_notifications.bounceevents USING btree (id);
+CREATE INDEX bounceevents_message_id_idx ON ses_notifications.bounceevents USING btree (message_id);
+CREATE INDEX bounceevents_notification_id_idx ON ses_notifications.bounceevents USING btree (notification_id);
+CREATE INDEX bounceevents_sent_at_idx ON ses_notifications.bounceevents USING btree (sent_at);
+
 CREATE TABLE ses_notifications.deliveryevents (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	notification_id int8 NOT NULL,
