@@ -84,7 +84,7 @@ namespace SesNotifications.App.Services
                 : _sesDeliveryEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
-        public IList<SesBounceEvent> FindBounceEventsEvents(string email, DateTime start, DateTime end)
+        public IList<SesBounceEvent> FindBounceEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesBounceEventsRepository.FindBySentDateRange(start, end)
