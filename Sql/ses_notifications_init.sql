@@ -15,7 +15,6 @@ CREATE TABLE ses_notifications.bounceevents (
 	created_at timestamptz NULL,
 	feedback_id varchar(256) NULL,
 	reporting_mta varchar(256) NULL,
-	remote_mta_ip varchar(32) NULL,
 	bounced_recipients varchar(64000) NULL COLLATE "ucs_basic"
 );
 CREATE INDEX bounceevents_bounce_sub_type_idx ON ses_notifications.bounceevents USING btree (bounce_sub_type);
