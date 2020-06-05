@@ -25,6 +25,7 @@ namespace SesNotifications.App.Services
         private readonly ISesSendEventsRepository _sesSendEventsRepository;
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
+        private readonly ISesComplaintEventsRepository _sesComplaintEventsRepository;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
@@ -35,6 +36,7 @@ namespace SesNotifications.App.Services
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ISesBounceEventsRepository sesBounceEventsRepository,
+            ISesComplaintEventsRepository sesComplaintEventsRepository,
             ILogger<NotificationService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -46,6 +48,7 @@ namespace SesNotifications.App.Services
             _sesDeliveriesRepository = sesDeliveriesRepository;
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _sesBounceEventsRepository = sesBounceEventsRepository;
+            _sesComplaintEventsRepository = sesComplaintEventsRepository;
             _logger = logger;
         }
 
@@ -107,10 +110,22 @@ namespace SesNotifications.App.Services
                     case Bounce:
                         HandleBounceEvent(content);
                         break;
+                    case Complaint:
+                        HandleComplaintEvent(content);
+                        break;
                     default:
                         throw new NotSupportedException($"Unsupported message {content.Substring(0, 50)}...");
                 }
             }
+        }
+
+        private void HandleComplaintEvent(string content)
+        {
+            var complaintEvent = JsonConvert.DeserializeObject<SesComplaintEventModel>(content);
+
+            var notification = SaveNotification(complaintEvent.Mail, content);
+
+            _sesComplaintEventsRepository.Save(complaintEvent.Create(notification.Id));
         }
 
         private void HandleBounceEvent(string content)

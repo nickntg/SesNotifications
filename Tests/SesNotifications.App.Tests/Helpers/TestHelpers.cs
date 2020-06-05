@@ -71,6 +71,24 @@ namespace SesNotifications.App.Tests.Helpers
                 }
             };
         }
+
+        public static SesComplaintEventModel GetSesComplaintEventModel(DateTime dt)
+        {
+            return new SesComplaintEventModel
+            {
+                NotificationType = "Complaint",
+                Mail = GetSesMail(dt),
+                Complaint = new SesComplaintEvent
+                {
+                    Timestamp = dt.Iso8601(),
+                    ComplainedRecipients = new[] { new SesComplaintRecipient { EmailAddress = "address" } },
+                    FeedbackId = "feedback_id",
+                    ComplaintFeedbackType = null,
+                    ComplaintSubType = "abuse",
+                    ArrivalDate = null
+                }
+            };
+        }
         public static SesBounceModel GetSesBounceModel(DateTime dt)
         {
             return new SesBounceModel
