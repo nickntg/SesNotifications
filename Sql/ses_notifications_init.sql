@@ -1,5 +1,32 @@
 CREATE SCHEMA ses_notifications AUTHORIZATION postgres;
 
+CREATE TABLE ses_notifications.complaintevents (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	notification_id int8 NOT NULL,
+	notification_type varchar(32) NOT NULL,
+	sent_at timestamptz NOT NULL,
+	message_id varchar(128) NOT NULL,
+	source varchar(256) NOT NULL COLLATE "ucs_basic",
+	source_arn varchar(256) NULL,
+	source_ip varchar(32) NULL,
+	sending_account_id varchar(128) NULL,
+	created_at timestamptz NULL,
+	complaint_sub_type varchar(64) NULL COLLATE "ucs_basic",
+	complaint_feedback_type varchar(256) NULL COLLATE "ucs_basic",
+	feedback_id varchar(256) NULL,
+	complained_recipients varchar(64000) NULL COLLATE "ucs_basic",
+	arrival_date timestamptz NULL
+);
+CREATE INDEX complaintevents_complained_recipients_idx ON ses_notifications.complaintevents (complained_recipients);
+CREATE INDEX complaintevents_complaint_feedback_type_idx ON ses_notifications.complaintevents (complaint_feedback_type);
+CREATE INDEX complaintevents_complaint_sub_type_idx ON ses_notifications.complaintevents (complaint_sub_type);
+CREATE INDEX complaintevents_created_at_idx ON ses_notifications.complaintevents (created_at);
+CREATE INDEX complaintevents_from_idx ON ses_notifications.complaintevents (source);
+CREATE UNIQUE INDEX complaintevents_id_idx ON ses_notifications.complaintevents (id);
+CREATE INDEX complaintevents_message_id_idx ON ses_notifications.complaintevents (message_id);
+CREATE INDEX complaintevents_notification_id_idx ON ses_notifications.complaintevents (notification_id);
+CREATE INDEX complaintevents_sent_at_idx ON ses_notifications.complaintevents (sent_at);
+
 CREATE TABLE ses_notifications.bounceevents (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	notification_id int8 NOT NULL,
