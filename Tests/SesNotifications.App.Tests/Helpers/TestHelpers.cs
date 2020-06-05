@@ -160,7 +160,7 @@ namespace SesNotifications.App.Tests.Helpers
                 SendingAccountId = "sending_account_id",
                 Source = "source",
                 SourceIp = "source_ip",
-                Destination = new[] {"destination_1"},
+                Destination = new[] {"destination_1","destination_2"},
                 Timestamp = dt.Iso8601()
             };
         }

@@ -15,7 +15,7 @@ namespace SesNotifications.App.Tests.Factories
 
             var sesDelivery = delivery.Create(1);
 
-            Assert.Equal(sesDelivery.Recipients, string.Join(',', delivery.Delivery.Recipients));
+            Assert.Equal(sesDelivery.Recipients, string.Join(',', delivery.Mail.Destination));
             Assert.Equal(sesDelivery.SmtpResponse, delivery.Delivery.SmtpResponse);
             Assert.Equal(sesDelivery.DeliveredAt.Iso8601(), dt.Iso8601());
             Assert.Equal(sesDelivery.SentAt.Iso8601(), dt.Iso8601());

@@ -22,7 +22,7 @@ namespace SesNotifications.App.Factories
                 SmtpResponse = delivery.Delivery.SmtpResponse,
                 ReportingMta = delivery.Delivery.ReportingMta,
                 RemoteMtaIp = delivery.Delivery.RemoteMtaIp,
-                Recipients = string.Join(',', delivery.Delivery.Recipients)
+                Recipients = string.Join(',', delivery.Mail.Destination)
             };
         }
     }
