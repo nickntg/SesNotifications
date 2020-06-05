@@ -64,7 +64,7 @@ CREATE TABLE ses_notifications.openevents (
 	recipients varchar(64000) NULL COLLATE "ucs_basic",
 	opened_at timestamptz NULL,
 	user_agent varchar(1024) NULL,
-	ip_address varchar(32) NULL
+	ip_address varchar(128) NULL
 );
 CREATE INDEX openevents_recipients_idx ON ses_notifications.openevents USING btree (recipients);
 CREATE INDEX openevents_from_idx ON ses_notifications.openevents USING btree (source);
