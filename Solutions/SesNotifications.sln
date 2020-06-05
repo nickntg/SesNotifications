@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SesNotifications.DataAccess
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SesNotifications.App", "..\Projects\SesNotifications.App\SesNotifications.App.csproj", "{D602FAAD-D81A-4218-9833-890FE19EC8C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SesNotifications.App.Tests", "..\Tests\SesNotifications.App.Tests\SesNotifications.App.Tests.csproj", "{ADD8481B-58E6-4724-A01D-778481100705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SesNotifications.App.Tests", "..\Tests\SesNotifications.App.Tests\SesNotifications.App.Tests.csproj", "{ADD8481B-58E6-4724-A01D-778481100705}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3C7CFF1-886A-450E-AEB9-1AA34232B277}"
+	ProjectSection(SolutionItems) = preProject
+		..\Docker\postgres.yml = ..\Docker\postgres.yml
+		..\Sql\ses_notifications_init.sql = ..\Sql\ses_notifications_init.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
