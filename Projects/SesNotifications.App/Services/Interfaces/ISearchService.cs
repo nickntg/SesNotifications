@@ -15,6 +15,7 @@ namespace SesNotifications.App.Services.Interfaces
         IList<SesSendEvent> FindSendEvents(string email, DateTime start, DateTime end);
         IList<SesDeliveryEvent> FindDeliveryEvents(string email, DateTime start, DateTime end);
         IList<SesBounceEvent> FindBounceEvents(string email, DateTime start, DateTime end);
+        IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end);
         IList<SesNotification> FindRaw(DateTime start, DateTime end);
         SesNotification FindRaw(long id);
     }

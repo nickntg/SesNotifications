@@ -19,6 +19,7 @@ namespace SesNotifications.App.Services
         private readonly ISesSendEventsRepository _sesSendEventsRepository;
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
+        private readonly ISesComplaintEventsRepository _sesComplaintEventsRepository;
         private readonly ILogger<SearchService> _logger;
 
         public SearchService(INotificationsRepository notificationsRepository,
@@ -29,6 +30,7 @@ namespace SesNotifications.App.Services
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ISesBounceEventsRepository sesBounceEventsRepository,
+            ISesComplaintEventsRepository sesComplaintEventsRepository,
             ILogger<SearchService> logger)
         {
             _notificationsRepository = notificationsRepository;
@@ -39,6 +41,7 @@ namespace SesNotifications.App.Services
             _sesSendEventsRepository = sesSendEventsRepository;
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _sesBounceEventsRepository = sesBounceEventsRepository;
+            _sesComplaintEventsRepository = sesComplaintEventsRepository;
             _logger = logger;
         }
 
@@ -89,6 +92,13 @@ namespace SesNotifications.App.Services
             return string.IsNullOrEmpty(email)
                 ? _sesBounceEventsRepository.FindBySentDateRange(start, end)
                 : _sesBounceEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+        }
+
+        public IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end)
+        {
+            return string.IsNullOrEmpty(email)
+                ? _sesComplaintEventsRepository.FindBySentDateRange(start, end)
+                : _sesComplaintEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
         }
 
         public IList<SesNotification> FindRaw(DateTime start, DateTime end)
