@@ -18,7 +18,7 @@ namespace SesNotifications.App.Services.Interfaces
         IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end);
         IList<SesNotification> FindRaw(DateTime start, DateTime end);
         IList<SesNotification> FindRaw(DateTime start, DateTime end, long? firstId, int page, int pageSize);
-        int Count(DateTime start, DateTime end);
+        int FindRawCount(DateTime start, DateTime end);
         SesNotification FindRaw(long id);
     }
 }

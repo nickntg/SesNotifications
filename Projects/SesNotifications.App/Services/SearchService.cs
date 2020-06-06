@@ -111,7 +111,7 @@ namespace SesNotifications.App.Services
             return _notificationsRepository.FindById(start, end, firstId, page, pageSize);
         }
 
-        public int Count(DateTime start, DateTime end)
+        public int FindRawCount(DateTime start, DateTime end)
         {
             return _notificationsRepository.Count(start, end);
         }

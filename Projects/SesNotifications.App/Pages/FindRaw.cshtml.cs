@@ -22,7 +22,7 @@ namespace SesNotifications.App.Pages
 
         protected override void Search()
         {
-            var countOfResults = _searchService.Count(Input.Start.StartOfDay(), Input.End.StartOfDay());
+            var countOfResults = _searchService.FindRawCount(Input.Start.StartOfDay(), Input.End.EndOfDay());
 
             Raw = _searchService.FindRaw(Input.Start.StartOfDay(), Input.End.EndOfDay(), null, 0, PageSize);
 
