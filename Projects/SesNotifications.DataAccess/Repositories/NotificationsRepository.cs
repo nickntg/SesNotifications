@@ -51,5 +51,35 @@ namespace SesNotifications.DataAccess.Repositories
                 .AddOrder(Order.Desc(nameof(SesNotification.SentAt)))
                 .List<SesNotification>();
         }
+
+        public IList<SesNotification> FindById(DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            if (!firstId.HasValue)
+            {
+                return Session.CreateCriteria<SesNotification>()
+                    .Add(Restrictions.Ge(nameof(SesNotification.SentAt), start))
+                    .Add(Restrictions.Le(nameof(SesNotification.SentAt), end))
+                    .AddOrder(Order.Desc(nameof(SesNotification.Id)))
+                    .SetMaxResults(pageSize)
+                    .List<SesNotification>();
+            }
+
+            return Session.CreateCriteria<SesNotification>()
+                .Add(Restrictions.Ge(nameof(SesNotification.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesNotification.SentAt), end))
+                .Add(Restrictions.Le(nameof(SesNotification.Id), firstId.Value - page * pageSize))
+                .AddOrder(Order.Desc(nameof(SesNotification.Id)))
+                .SetMaxResults(pageSize)
+                .List<SesNotification>();
+        }
+
+        public int Count(DateTime start, DateTime end)
+        {
+            return Session.CreateCriteria<SesNotification>()
+                .Add(Restrictions.Ge(nameof(SesNotification.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesNotification.SentAt), end))
+                .List<SesNotification>()
+                .Count;
+        }
     }
 }

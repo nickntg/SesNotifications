@@ -106,6 +106,16 @@ namespace SesNotifications.App.Services
             return _notificationsRepository.FindBySentDateRange(start, end);
         }
 
+        public IList<SesNotification> FindRaw(DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            return _notificationsRepository.FindById(start, end, firstId, page, pageSize);
+        }
+
+        public int Count(DateTime start, DateTime end)
+        {
+            return _notificationsRepository.Count(start, end);
+        }
+
         public SesNotification FindRaw(long id)
         {
             return _notificationsRepository.FindById(id);

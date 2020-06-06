@@ -11,5 +11,7 @@ namespace SesNotifications.DataAccess.Repositories.Interfaces
         IList<SesNotification> FindByMessageId(string messageId);
         IList<SesNotification> FindByReceptionDateRange(DateTime start, DateTime end);
         IList<SesNotification> FindBySentDateRange(DateTime start, DateTime end);
+        IList<SesNotification> FindById(DateTime start, DateTime end, long? firstId, int page, int pageSize);
+        int Count(DateTime start, DateTime end);
     }
 }

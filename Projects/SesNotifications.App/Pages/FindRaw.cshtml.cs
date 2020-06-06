@@ -1,31 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using SesNotifications.App.Helpers;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 
 namespace SesNotifications.App.Pages
 {
-    public class FindRawModel : PageModel
+    public class FindRawModel : PageBase
     {
         [BindProperty]
-        public InputModel Input { get; set; }
+        public RawInputModel Input { get; set; }
 
         public IList<SesNotification> Raw { get; set; } = new List<SesNotification>();
-
-        public class InputModel
-        {
-            [Required]
-            [DataType(DataType.Date)]
-            public DateTime Start { get; set; }
-
-            [Required]
-            [DataType(DataType.Date)]
-            public DateTime End { get; set; }
-        }
 
         private readonly ISearchService _searchService;
 
@@ -34,10 +20,45 @@ namespace SesNotifications.App.Pages
             _searchService = searchService;
         }
 
-        public IActionResult OnPost()
+        protected override void Search()
         {
-            Raw = _searchService.FindRaw(Input.Start.StartOfDay(), Input.End.EndOfDay());
-            return Page();
+            var countOfResults = _searchService.Count(Input.Start.StartOfDay(), Input.End.StartOfDay());
+
+            Raw = _searchService.FindRaw(Input.Start.StartOfDay(), Input.End.EndOfDay(), null, 0, PageSize);
+
+            if (Raw.Count > 0)
+            {
+                FirstId = (int)Raw[0].Id;
+            }
+
+            PageNumber = 1;
+            NumberOfPages = countOfResults / PageSize + 1;
+            Start = Input.Start;
+            End = Input.End;
         }
+
+        protected override void GetPage()
+        {
+            Raw = _searchService.FindRaw(Start.StartOfDay(),
+                End.EndOfDay(),
+                FirstId,
+                PageNumber - 1,
+                PageSize);
+        }
+
+        protected override void CreateModel()
+        {
+            Input = new RawInputModel();
+        }
+
+        protected override void SaveState()
+        {
+            SaveState(Input);
+        }
+    }
+
+    public class RawInputModel : BaseInputModel
+    {
+
     }
 }
