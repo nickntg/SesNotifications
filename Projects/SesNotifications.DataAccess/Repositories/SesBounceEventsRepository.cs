@@ -60,5 +60,38 @@ namespace SesNotifications.DataAccess.Repositories
                 .AddOrder(Order.Desc(nameof(SesBounceEvent.SentAt)))
                 .List<SesBounceEvent>();
         }
+
+        public int Count(string email, DateTime start, DateTime end)
+        {
+            return Session.CreateCriteria<SesBounceEvent>()
+                .Add(Restrictions.InsensitiveLike(nameof(SesBounceEvent.BouncedRecipients), email))
+                .Add(Restrictions.Ge(nameof(SesBounceEvent.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesBounceEvent.SentAt), end))
+                .List<SesBounceEvent>()
+                .Count;
+        }
+
+        public IList<SesBounceEvent> FindById(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            if (!firstId.HasValue)
+            {
+                return Session.CreateCriteria<SesBounceEvent>()
+                    .Add(Restrictions.InsensitiveLike(nameof(SesBounceEvent.BouncedRecipients), email))
+                    .Add(Restrictions.Ge(nameof(SesBounceEvent.SentAt), start))
+                    .Add(Restrictions.Le(nameof(SesBounceEvent.SentAt), end))
+                    .AddOrder(Order.Desc(nameof(SesBounceEvent.Id)))
+                    .SetMaxResults(pageSize)
+                    .List<SesBounceEvent>();
+            }
+
+            return Session.CreateCriteria<SesBounceEvent>()
+                .Add(Restrictions.InsensitiveLike(nameof(SesBounceEvent.BouncedRecipients), email))
+                .Add(Restrictions.Ge(nameof(SesBounceEvent.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesBounceEvent.SentAt), end))
+                .Add(Restrictions.Le(nameof(SesBounceEvent.Id), firstId.Value - page * pageSize))
+                .AddOrder(Order.Desc(nameof(SesBounceEvent.Id)))
+                .SetMaxResults(pageSize)
+                .List<SesBounceEvent>();
+        }
     }
 }

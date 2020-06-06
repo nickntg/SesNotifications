@@ -60,5 +60,39 @@ namespace SesNotifications.DataAccess.Repositories
                 .AddOrder(Order.Desc(nameof(SesDelivery.SentAt)))
                 .List<SesDelivery>();
         }
+
+        public int Count(string email, DateTime start, DateTime end)
+        {
+            return Session.CreateCriteria<SesDelivery>()
+                .Add(Restrictions.InsensitiveLike(nameof(SesDelivery.Recipients), email))
+                .Add(Restrictions.Ge(nameof(SesDelivery.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesDelivery.SentAt), end))
+                .List<SesDelivery>()
+                .Count;
+        }
+
+        public IList<SesDelivery> FindById(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            if (!firstId.HasValue)
+            {
+                return Session.CreateCriteria<SesDelivery>()
+                    .Add(Restrictions.InsensitiveLike(nameof(SesDelivery.Recipients), email))
+                    .Add(Restrictions.Ge(nameof(SesDelivery.SentAt), start))
+                    .Add(Restrictions.Le(nameof(SesDelivery.SentAt), end))
+                    .AddOrder(Order.Desc(nameof(SesDelivery.Id)))
+                    .SetMaxResults(pageSize)
+                    .List<SesDelivery>();
+            }
+
+            return Session.CreateCriteria<SesDelivery>()
+                .Add(Restrictions.InsensitiveLike(nameof(SesDelivery.Recipients), email))
+                .Add(Restrictions.Ge(nameof(SesDelivery.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesDelivery.SentAt), end))
+                .Add(Restrictions.Le(nameof(SesDelivery.Id), firstId.Value - page * pageSize))
+                .AddOrder(Order.Desc(nameof(SesDelivery.Id)))
+                .SetMaxResults(pageSize)
+                .List<SesDelivery>();
+        }
+
     }
 }

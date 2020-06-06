@@ -70,5 +70,38 @@ namespace SesNotifications.DataAccess.Repositories
                 .AddOrder(Order.Desc(nameof(SesComplaintEvent.SentAt)))
                 .List<SesComplaintEvent>();
         }
+
+        public int Count(string email, DateTime start, DateTime end)
+        {
+            return Session.CreateCriteria<SesComplaintEvent>()
+                .Add(Restrictions.InsensitiveLike(nameof(SesComplaintEvent.ComplainedRecipients), email))
+                .Add(Restrictions.Ge(nameof(SesComplaintEvent.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesComplaintEvent.SentAt), end))
+                .List<SesComplaintEvent>()
+                .Count;
+        }
+
+        public IList<SesComplaintEvent> FindById(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            if (!firstId.HasValue)
+            {
+                return Session.CreateCriteria<SesComplaintEvent>()
+                    .Add(Restrictions.InsensitiveLike(nameof(SesComplaintEvent.ComplainedRecipients), email))
+                    .Add(Restrictions.Ge(nameof(SesComplaintEvent.SentAt), start))
+                    .Add(Restrictions.Le(nameof(SesComplaintEvent.SentAt), end))
+                    .AddOrder(Order.Desc(nameof(SesComplaintEvent.Id)))
+                    .SetMaxResults(pageSize)
+                    .List<SesComplaintEvent>();
+            }
+
+            return Session.CreateCriteria<SesComplaintEvent>()
+                .Add(Restrictions.InsensitiveLike(nameof(SesComplaintEvent.ComplainedRecipients), email))
+                .Add(Restrictions.Ge(nameof(SesComplaintEvent.SentAt), start))
+                .Add(Restrictions.Le(nameof(SesComplaintEvent.SentAt), end))
+                .Add(Restrictions.Le(nameof(SesComplaintEvent.Id), firstId.Value - page * pageSize))
+                .AddOrder(Order.Desc(nameof(SesComplaintEvent.Id)))
+                .SetMaxResults(pageSize)
+                .List<SesComplaintEvent>();
+        }
     }
 }

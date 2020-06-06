@@ -13,5 +13,8 @@ namespace SesNotifications.DataAccess.Repositories.Interfaces
         IList<SesComplaint> FindByRecipient(string email);
         IList<SesComplaint> FindByRecipientAndSentDateRange(string email, DateTime start, DateTime end);
         IList<SesComplaint> FindByComplaintSubTypeAndSentDateRange(string complaintSubType, DateTime start, DateTime end);
+        IList<SesComplaint> FindById(string email, DateTime start, DateTime end, long? firstId, int page,
+            int pageSize);
+        int Count(string email, DateTime start, DateTime end);
     }
 }

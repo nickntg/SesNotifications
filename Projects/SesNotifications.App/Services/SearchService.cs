@@ -116,6 +116,88 @@ namespace SesNotifications.App.Services
             return _notificationsRepository.Count(start, end);
         }
 
+        public int FindDeliveriesCount(string email, DateTime start, DateTime end)
+        {
+            return _sesDeliveriesRepository.Count(email, start, end);
+        }
+
+        public int FindComplaintsCount(string email, DateTime start, DateTime end)
+        {
+            return _sesComplaintsRepository.Count(email, start, end);
+        }
+
+        public int FindBouncesCount(string email, DateTime start, DateTime end)
+        {
+            return _sesBouncesRepository.Count(email, start, end);
+        }
+
+        public int FindOpenEventsCount(string email, DateTime start, DateTime end)
+        {
+            return _sesOpensEventsRepository.Count(email, start, end);
+        }
+
+        public int FindSendEventsCount(string email, DateTime start, DateTime end)
+        {
+            return _sesSendEventsRepository.Count(email, start, end);
+        }
+
+        public int FindDeliveryEventsCount(string email, DateTime start, DateTime end)
+        {
+            return _sesDeliveryEventsRepository.Count(email, start, end);
+        }
+
+        public int FindComplaintEventCount(string email, DateTime start, DateTime end)
+        {
+            return _sesComplaintEventsRepository.Count(email, start, end);
+        }
+
+        public IList<SesDelivery> FindDeliveries(string email, DateTime start, DateTime end, long? firstId, int page,
+            int pageSize)
+        {
+            return _sesDeliveriesRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesComplaint> FindComplaints(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            return _sesComplaintsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesBounce> FindBounces(string email, DateTime start, DateTime end, long? firstId, int page,
+            int pageSize)
+        {
+            return _sesBouncesRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesOpenEvent> FindOpenEvents(string email, DateTime start, DateTime end, long? firstId, int page,
+            int pageSize)
+        {
+            return _sesOpensEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesSendEvent> FindSendEvents(string email, DateTime start, DateTime end, long? firstId, int page,
+            int pageSize)
+        {
+            return _sesSendEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesDeliveryEvent> FindDeliveryEvents(string email, DateTime start, DateTime end, long? firstId,
+            int page, int pageSize)
+        {
+            return _sesDeliveryEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesBounceEvent> FindBounceEvents(string email, DateTime start, DateTime end, long? firstId,
+            int page, int pageSize)
+        {
+            return _sesBounceEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end, long? firstId,
+            int page, int pageSize)
+        {
+            return _sesComplaintEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
         public SesNotification FindRaw(long id)
         {
             return _notificationsRepository.FindById(id);

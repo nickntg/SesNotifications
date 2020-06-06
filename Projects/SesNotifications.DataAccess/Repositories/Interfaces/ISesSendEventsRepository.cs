@@ -12,5 +12,8 @@ namespace SesNotifications.DataAccess.Repositories.Interfaces
         IList<SesSendEvent> FindBySentDateRange(DateTime start, DateTime end);
         IList<SesSendEvent> FindByRecipient(string email);
         IList<SesSendEvent> FindByRecipientAndSentDateRange(string email, DateTime start, DateTime end);
+        IList<SesSendEvent> FindById(string email, DateTime start, DateTime end, long? firstId, int page,
+            int pageSize);
+        int Count(string email, DateTime start, DateTime end);
     }
 }
