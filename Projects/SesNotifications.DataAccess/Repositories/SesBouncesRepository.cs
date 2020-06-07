@@ -84,7 +84,7 @@ namespace SesNotifications.DataAccess.Repositories
                     .List<SesBounce>();
             }
 
-            return Session.CreateCriteria<SesBounceEvent>()
+            return Session.CreateCriteria<SesBounce>()
                 .AddIfNotEmpty(email, nameof(SesBounce.BouncedRecipients))
                 .Add(Restrictions.Ge(nameof(SesBounce.SentAt), start))
                 .Add(Restrictions.Le(nameof(SesBounce.SentAt), end))

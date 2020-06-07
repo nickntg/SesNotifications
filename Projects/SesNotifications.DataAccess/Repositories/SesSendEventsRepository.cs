@@ -88,7 +88,7 @@ namespace SesNotifications.DataAccess.Repositories
                 .AddIfNotEmpty(email, nameof(SesSendEvent.Recipients))
                 .Add(Restrictions.Ge(nameof(SesSendEvent.SentAt), start))
                 .Add(Restrictions.Le(nameof(SesSendEvent.SentAt), end))
-                .Add(Restrictions.Le(nameof(SesSendEvent), firstId.Value - page * pageSize))
+                .Add(Restrictions.Le(nameof(SesSendEvent.Id), firstId.Value - page * pageSize))
                 .AddOrder(Order.Desc(nameof(SesSendEvent.Id)))
                 .SetMaxResults(pageSize)
                 .List<SesSendEvent>();

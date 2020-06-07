@@ -7,7 +7,7 @@ namespace SesNotifications.App.Pages
 {
     public abstract class PageBase : PageModel
     {
-        protected const int PageSize = 5;
+        protected const int PageSize = 50;
 
         [TempData]
         public int FirstId { get; set; }

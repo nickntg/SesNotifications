@@ -78,7 +78,7 @@
                     @for (var i = 1; i <= (int) ViewData["NumberOfPages"]; i++)
                     {
                         <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
-                            <a asp-page="FindRaw" 
+                            <a asp-page="FindDeliveryEvents" 
                                asp-route-currentpage="@i" 
                                asp-route-start="@ViewData["Start"]"
                                asp-route-end ="@ViewData["End"]"

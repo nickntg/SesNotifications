@@ -11,7 +11,7 @@ namespace SesNotifications.App.Pages
         [BindProperty]
         public BaseEmailInputModel Input { get; set; }
 
-        public IList<SesComplaintEvent> Complaints { get; set; } = new List<SesComplaintEvent>();
+        public IList<SesComplaint> Complaints { get; set; } = new List<SesComplaint>();
 
         private readonly ISearchService _searchService;
 
@@ -22,9 +22,9 @@ namespace SesNotifications.App.Pages
 
         protected override void Search()
         {
-            var countOfResults = _searchService.FindComplaintEventCount(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay());
+            var countOfResults = _searchService.FindComplaintsCount(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay());
 
-            Complaints = _searchService.FindComplaintEvents(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay(), null, 0, PageSize);
+            Complaints = _searchService.FindComplaints(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay(), null, 0, PageSize);
 
             if (Complaints.Count > 0)
             {
@@ -40,7 +40,7 @@ namespace SesNotifications.App.Pages
 
         protected override void GetPage()
         {
-            Complaints = _searchService.FindComplaintEvents(
+            Complaints = _searchService.FindComplaints(
                 Email,
                 Start.StartOfDay(),
                 End.EndOfDay(),
