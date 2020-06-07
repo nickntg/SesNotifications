@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using Moq;
 using SesNotifications.App.Services;
 using SesNotifications.DataAccess.Entities;
@@ -22,10 +21,9 @@ namespace SesNotifications.App.Tests.Services
             mockSesDeliveries.Setup(x =>
                     x.FindByRecipientAndSentDateRange(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(new List<SesDelivery>());
-            var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(null, null, null, mockSesDeliveries.Object, null, null, null,
-                null, null, mockLogger.Object);
+                null, null);
 
             service.FindDeliveries(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -47,10 +45,9 @@ namespace SesNotifications.App.Tests.Services
             mockSesBounces.Setup(x =>
                     x.FindByRecipientAndSentDateRange(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(new List<SesBounce>());
-            var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(null, mockSesBounces.Object, null, null, null, null, null,
-                null, null, mockLogger.Object);
+                null, null);
 
             service.FindBounces(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -72,10 +69,9 @@ namespace SesNotifications.App.Tests.Services
             mockSesComplaints.Setup(x =>
                     x.FindByRecipientAndSentDateRange(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(new List<SesComplaint>());
-            var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(null, null, mockSesComplaints.Object, null, null, null, null,
-                null, null, mockLogger.Object);
+                null, null);
 
             service.FindComplaints(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -92,10 +88,9 @@ namespace SesNotifications.App.Tests.Services
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             mockNotifications.Setup(x => x.FindBySentDateRange(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(new List<SesNotification>());
-            var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(mockNotifications.Object, null, null, null, null, null, null,
-                null, null, mockLogger.Object);
+                null, null);
 
             service.FindRaw(DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -107,10 +102,9 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             mockNotifications.Setup(x => x.FindById(1)).Returns(new SesNotification());
-            var mockLogger = new Mock<ILogger<SearchService>>(MockBehavior.Loose);
 
             var service = new SearchService(mockNotifications.Object, null, null, null, null, null, null,
-                null, null, mockLogger.Object);
+                null, null);
 
             service.FindRaw(1);
 

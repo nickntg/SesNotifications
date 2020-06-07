@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
+using NLog;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 using SesNotifications.DataAccess.Repositories.Interfaces;
@@ -11,6 +11,8 @@ namespace SesNotifications.App.Services
 {
     public class SearchService : ISearchService
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly INotificationsRepository _notificationsRepository;
         private readonly ISesBouncesRepository _sesBouncesRepository;
         private readonly ISesComplaintsRepository _sesComplaintsRepository;
@@ -20,7 +22,6 @@ namespace SesNotifications.App.Services
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
         private readonly ISesComplaintEventsRepository _sesComplaintEventsRepository;
-        private readonly ILogger<SearchService> _logger;
 
         public SearchService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
@@ -30,8 +31,7 @@ namespace SesNotifications.App.Services
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ISesBounceEventsRepository sesBounceEventsRepository,
-            ISesComplaintEventsRepository sesComplaintEventsRepository,
-            ILogger<SearchService> logger)
+            ISesComplaintEventsRepository sesComplaintEventsRepository)
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
@@ -42,7 +42,6 @@ namespace SesNotifications.App.Services
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _sesBounceEventsRepository = sesBounceEventsRepository;
             _sesComplaintEventsRepository = sesComplaintEventsRepository;
-            _logger = logger;
         }
 
         public IList<SesDelivery> FindDeliveries(string email, DateTime start, DateTime end)

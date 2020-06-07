@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NLog;
 using SesNotifications.App.Factories;
 using SesNotifications.App.Models;
 using SesNotifications.App.Services.Interfaces;
@@ -11,6 +12,8 @@ namespace SesNotifications.App.Services
 {
     public class NotificationService : INotificationService
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private const string Bounce = "bounce";
         private const string Delivery = "delivery";
         private const string Complaint = "complaint";
@@ -26,7 +29,6 @@ namespace SesNotifications.App.Services
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
         private readonly ISesComplaintEventsRepository _sesComplaintEventsRepository;
-        private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
@@ -36,8 +38,8 @@ namespace SesNotifications.App.Services
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ISesBounceEventsRepository sesBounceEventsRepository,
-            ISesComplaintEventsRepository sesComplaintEventsRepository,
-            ILogger<NotificationService> logger)
+            ISesComplaintEventsRepository sesComplaintEventsRepository
+            )
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
@@ -49,20 +51,19 @@ namespace SesNotifications.App.Services
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _sesBounceEventsRepository = sesBounceEventsRepository;
             _sesComplaintEventsRepository = sesComplaintEventsRepository;
-            _logger = logger;
         }
 
         public void HandleNotification(string content)
         {
             try
             {
-                _logger.LogDebug($"Handling {content}");
+                Logger.Debug($"Handling {content}");
                 HandleNotificationInternal(content);
-                _logger.LogDebug("Handled");
+                Logger.Debug("Handled");
             }
             catch (Exception e)
             {
-                _logger.LogError(e,$"Error occurred while handling content \r\n{content}");
+                Logger.Error(e,$"Error occurred while handling content \r\n{content}");
                 throw;
             }
         }

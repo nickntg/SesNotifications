@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using SesNotifications.App.Services;
@@ -16,13 +15,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesDeliveries = new Mock<ISesDeliveriesRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesDeliveries.Setup(x => x.Save(It.IsAny<SesDelivery>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, mockSesDeliveries.Object,
-                null, null, null, null, null, mockLogger.Object);
+                null, null, null, null, null);
 
             service.HandleNotification(Delivery);
 
@@ -35,13 +33,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesBounces = new Mock<ISesBouncesRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesBounces.Setup(x => x.Save(It.IsAny<SesBounce>()));
 
             var service = new NotificationService(mockNotifications.Object, mockSesBounces.Object, null, null,
-                null, null, null, null, null, mockLogger.Object);
+                null, null, null, null, null);
 
             service.HandleNotification(Bounce);
 
@@ -54,13 +51,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesComplaints = new Mock<ISesComplaintsRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesComplaints.Setup(x => x.Save(It.IsAny<SesComplaint>()));
 
             var service = new NotificationService(mockNotifications.Object, null, mockSesComplaints.Object, null,
-                null, null, null, null, null, mockLogger.Object);
+                null, null, null, null, null);
 
             service.HandleNotification(Complaint);
 
@@ -73,13 +69,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesOpens = new Mock<ISesOpensEventsRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesOpens.Setup(x => x.Save(It.IsAny<SesOpenEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                mockSesOpens.Object, null, null, null, null, mockLogger.Object);
+                mockSesOpens.Object, null, null, null, null);
 
             service.HandleNotification(OpenEvent);
 
@@ -92,13 +87,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesSends = new Mock<ISesSendEventsRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesSends.Setup(x => x.Save(It.IsAny<SesSendEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, mockSesSends.Object, null, null, null, mockLogger.Object);
+                null, mockSesSends.Object, null, null, null);
 
             service.HandleNotification(SendEvent);
 
@@ -111,13 +105,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesDeliveries = new Mock<ISesDeliveryEventsRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesDeliveries.Setup(x => x.Save(It.IsAny<SesDeliveryEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, null, mockSesDeliveries.Object, null, null, mockLogger.Object);
+                null, null, mockSesDeliveries.Object, null, null);
 
             service.HandleNotification(DeliveryEvent);
 
@@ -130,13 +123,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesBounceEvents = new Mock<ISesBounceEventsRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesBounceEvents.Setup(x => x.Save(It.IsAny<SesBounceEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, null, null, mockSesBounceEvents.Object, null, mockLogger.Object);
+                null, null, null, mockSesBounceEvents.Object, null);
 
             service.HandleNotification(BounceEvent);
 
@@ -149,13 +141,12 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesComplaintEvents = new Mock<ISesComplaintEventsRepository>(MockBehavior.Strict);
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesComplaintEvents.Setup(x => x.Save(It.IsAny<SesComplaintEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, null, null, null, mockSesComplaintEvents.Object, mockLogger.Object);
+                null, null, null, null, mockSesComplaintEvents.Object);
 
             service.HandleNotification(ComplaintEvent);
 
@@ -166,10 +157,8 @@ namespace SesNotifications.App.Tests.Services
         [Fact]
         public void VerifyInvalidException()
         {
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
-
             var service =
-                new NotificationService(null, null, null, null, null, null, null, null, null, mockLogger.Object);
+                new NotificationService(null, null, null, null, null, null, null, null, null);
 
             Assert.Throws<JsonReaderException>(() => service.HandleNotification(NotJson));
         }
@@ -177,10 +166,8 @@ namespace SesNotifications.App.Tests.Services
         [Fact]
         public void VerifyUnsupportedException()
         {
-            var mockLogger = new Mock<ILogger<NotificationService>>(MockBehavior.Loose);
-
             var service =
-                new NotificationService(null, null, null, null, null, null, null, null, null, mockLogger.Object);
+                new NotificationService(null, null, null, null, null, null, null, null, null);
 
             Assert.Throws<NotSupportedException>(() => service.HandleNotification(Invalid));
         }
