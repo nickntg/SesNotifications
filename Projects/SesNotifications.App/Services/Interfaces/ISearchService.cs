@@ -25,6 +25,7 @@ namespace SesNotifications.App.Services.Interfaces
         int FindOpenEventsCount(string email, DateTime start, DateTime end);
         int FindSendEventsCount(string email, DateTime start, DateTime end);
         int FindDeliveryEventsCount(string email, DateTime start, DateTime end);
+        int FindBounceEventsCount(string email, DateTime start, DateTime end);
         int FindComplaintEventCount(string email, DateTime start, DateTime end);
         IList<SesDelivery> FindDeliveries(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize);
         IList<SesComplaint> FindComplaints(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize);
@@ -34,7 +35,6 @@ namespace SesNotifications.App.Services.Interfaces
         IList<SesDeliveryEvent> FindDeliveryEvents(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize);
         IList<SesBounceEvent> FindBounceEvents(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize);
         IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize);
-
         SesNotification FindRaw(long id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NHibernate;
+using NHibernate.Criterion;
 
 namespace SesNotifications.DataAccess.Repositories
 {
@@ -15,5 +16,5 @@ namespace SesNotifications.DataAccess.Repositories
 		{
 			Session = session;
 		}
-	}
+    }
 }

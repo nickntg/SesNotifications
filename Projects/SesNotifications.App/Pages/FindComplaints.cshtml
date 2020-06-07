@@ -52,25 +52,43 @@
             </tr>
             @foreach (var record in Model.Complaints)
             {
-        <tr>
-            <td>@record.Id</td>
-            <td>@record.NotificationId</td>
-            <td>@record.NotificationType</td>
-            <td>@record.SentAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
-            <td>@record.MessageId</td>
-            <td>@record.Source</td>
-            <td>@record.ComplainedRecipients</td>
-            <td>@record.ComplaintSubType</td>
-            <td>@record.ComplaintFeedbackType</td>
-            <td>@record.SourceArn</td>
-            <td>@record.SourceIp</td>
-            <td>@record.SendingAccountId</td>
-            <td>@record.CreatedAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
-            <td>@record.FeedbackId</td>
-            <td><a target="_blank" href="@Url.Action("FindRawById", "Searches", new {id = record.NotificationId})">RAW (MODEL)</a></td>
-            <td><a target="_blank" href="@string.Concat(Url.Action("FindMessageById", "Searches", new {id = record.NotificationId}), "/text")">RAW (MESSAGE)</a></td>
-        </tr>
+                <tr>
+                    <td>@record.Id</td>
+                    <td>@record.NotificationId</td>
+                    <td>@record.NotificationType</td>
+                    <td>@record.SentAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
+                    <td>@record.MessageId</td>
+                    <td>@record.Source</td>
+                    <td>@record.ComplainedRecipients</td>
+                    <td>@record.ComplaintSubType</td>
+                    <td>@record.ComplaintFeedbackType</td>
+                    <td>@record.SourceArn</td>
+                    <td>@record.SourceIp</td>
+                    <td>@record.SendingAccountId</td>
+                    <td>@record.CreatedAt.ToString("yyyy-MM-dd HH:mm:ssZ")</td>
+                    <td>@record.FeedbackId</td>
+                    <td><a target="_blank" href="@Url.Action("FindRawById", "Searches", new {id = record.NotificationId})">RAW (MODEL)</a></td>
+                    <td><a target="_blank" href="@string.Concat(Url.Action("FindMessageById", "Searches", new {id = record.NotificationId}), "/text")">RAW (MESSAGE)</a></td>
+                </tr>
             }
         </table>
+        
+        <div>
+            @if (Model.Complaints.Count > 0)
+            {
+                <ul class="pagination">
+                    @for (var i = 1; i <= (int) ViewData["NumberOfPages"]; i++)
+                    {
+                        <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
+                            <a asp-page="FindRaw" 
+                               asp-route-currentpage="@i" 
+                               asp-route-start="@ViewData["Start"]"
+                               asp-route-end ="@ViewData["End"]"
+                               class="page-link">@i</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
     </div>
 </div>

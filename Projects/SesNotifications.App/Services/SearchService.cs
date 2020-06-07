@@ -146,6 +146,11 @@ namespace SesNotifications.App.Services
             return _sesDeliveryEventsRepository.Count(email, start, end);
         }
 
+        public int FindBounceEventsCount(string email, DateTime start, DateTime end)
+        {
+            return _sesBounceEventsRepository.Count(email, start, end);
+        }
+
         public int FindComplaintEventCount(string email, DateTime start, DateTime end)
         {
             return _sesComplaintEventsRepository.Count(email, start, end);

@@ -1,33 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using SesNotifications.App.Helpers;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 
 namespace SesNotifications.App.Pages
 {
-    public class FindBouncesModel : PageModel
+    public class FindBouncesModel : PageBase
     {
         [BindProperty]
-        public InputModel Input { get; set; }
+        public BaseEmailInputModel Input { get; set; }
 
         public IList<SesBounce> Bounces { get; set; } = new List<SesBounce>();
-
-        public class InputModel
-        {
-            [Required]
-            [DataType(DataType.Date)]
-            public DateTime Start { get; set; }
-
-            [Required]
-            [DataType(DataType.Date)]
-            public DateTime End { get; set; }
-
-            public string Email { get; set; }
-        }
 
         private readonly ISearchService _searchService;
 
@@ -36,10 +20,44 @@ namespace SesNotifications.App.Pages
             _searchService = searchService;
         }
 
-        public IActionResult OnPost()
+        protected override void Search()
         {
-            Bounces = _searchService.FindBounces(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay());
-            return Page();
+            var countOfResults = _searchService.FindBouncesCount(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay());
+
+            Bounces = _searchService.FindBounces(Input.Email, Input.Start.StartOfDay(), Input.End.EndOfDay(), null, 0, PageSize);
+
+            if (Bounces.Count > 0)
+            {
+                FirstId = (int)Bounces[0].Id;
+            }
+
+            PageNumber = 1;
+            NumberOfPages = countOfResults / PageSize + 1;
+            Start = Input.Start;
+            End = Input.End;
+            Email = Input.Email;
+        }
+
+        protected override void GetPage()
+        {
+            Bounces = _searchService.FindBounces(
+                Email,
+                Start.StartOfDay(),
+                End.EndOfDay(),
+                FirstId,
+                PageNumber - 1,
+                PageSize);
+        }
+
+        protected override void CreateModel()
+        {
+            Input = new BaseEmailInputModel();
+        }
+
+        protected override void SaveState()
+        {
+            SaveState(Input);
+            Input.Email = Email;
         }
     }
 }

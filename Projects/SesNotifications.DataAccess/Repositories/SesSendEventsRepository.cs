@@ -64,7 +64,7 @@ namespace SesNotifications.DataAccess.Repositories
         public int Count(string email, DateTime start, DateTime end)
         {
             return Session.CreateCriteria<SesSendEvent>()
-                .Add(Restrictions.InsensitiveLike(nameof(SesSendEvent.Recipients), email))
+                .AddIfNotEmpty(email, nameof(SesSendEvent.Recipients))
                 .Add(Restrictions.Ge(nameof(SesSendEvent.SentAt), start))
                 .Add(Restrictions.Le(nameof(SesSendEvent.SentAt), end))
                 .List<SesSendEvent>()
@@ -76,7 +76,7 @@ namespace SesNotifications.DataAccess.Repositories
             if (!firstId.HasValue)
             {
                 return Session.CreateCriteria<SesSendEvent>()
-                    .Add(Restrictions.InsensitiveLike(nameof(SesSendEvent.Recipients), email))
+                    .AddIfNotEmpty(email, nameof(SesSendEvent.Recipients))
                     .Add(Restrictions.Ge(nameof(SesSendEvent.SentAt), start))
                     .Add(Restrictions.Le(nameof(SesSendEvent.SentAt), end))
                     .AddOrder(Order.Desc(nameof(SesSendEvent.Id)))
@@ -85,7 +85,7 @@ namespace SesNotifications.DataAccess.Repositories
             }
 
             return Session.CreateCriteria<SesSendEvent>()
-                .Add(Restrictions.InsensitiveLike(nameof(SesSendEvent.Recipients), email))
+                .AddIfNotEmpty(email, nameof(SesSendEvent.Recipients))
                 .Add(Restrictions.Ge(nameof(SesSendEvent.SentAt), start))
                 .Add(Restrictions.Le(nameof(SesSendEvent.SentAt), end))
                 .Add(Restrictions.Le(nameof(SesSendEvent), firstId.Value - page * pageSize))
