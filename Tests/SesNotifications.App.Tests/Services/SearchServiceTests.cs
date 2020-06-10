@@ -23,7 +23,7 @@ namespace SesNotifications.App.Tests.Services
                 .Returns(new List<SesDelivery>());
 
             var service = new SearchService(null, null, null, mockSesDeliveries.Object, null, null, null,
-                null, null);
+                null, null, null);
 
             service.FindDeliveries(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -47,7 +47,7 @@ namespace SesNotifications.App.Tests.Services
                 .Returns(new List<SesBounce>());
 
             var service = new SearchService(null, mockSesBounces.Object, null, null, null, null, null,
-                null, null);
+                null, null, null);
 
             service.FindBounces(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -71,7 +71,7 @@ namespace SesNotifications.App.Tests.Services
                 .Returns(new List<SesComplaint>());
 
             var service = new SearchService(null, null, mockSesComplaints.Object, null, null, null, null,
-                null, null);
+                null, null, null);
 
             service.FindComplaints(email, DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -90,7 +90,7 @@ namespace SesNotifications.App.Tests.Services
                 .Returns(new List<SesNotification>());
 
             var service = new SearchService(mockNotifications.Object, null, null, null, null, null, null,
-                null, null);
+                null, null, null);
 
             service.FindRaw(DateTime.UtcNow.AddDays(-30), DateTime.UtcNow.AddDays(1));
 
@@ -104,7 +104,7 @@ namespace SesNotifications.App.Tests.Services
             mockNotifications.Setup(x => x.FindById(1)).Returns(new SesNotification());
 
             var service = new SearchService(mockNotifications.Object, null, null, null, null, null, null,
-                null, null);
+                null, null, null);
 
             service.FindRaw(1);
 

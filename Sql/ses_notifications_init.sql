@@ -210,3 +210,44 @@ CREATE UNIQUE INDEX notifications_id_idx ON ses_notifications.notifications (id)
 CREATE INDEX notifications_message_id_idx ON ses_notifications.notifications (message_id);
 CREATE INDEX notifications_received_at_idx ON ses_notifications.notifications (received_at);
 CREATE INDEX notifications_sent_at_idx ON ses_notifications.notifications (sent_at);
+
+CREATE OR REPLACE VIEW ses_notifications.operational
+AS SELECT bounceevents.notification_id,
+    bounceevents.notification_type,
+    bounceevents.sent_at,
+    bounceevents.source,
+    bounceevents.created_at,
+    bounceevents.bounced_recipients AS recipients,
+    bounceevents.bounce_type AS detail1,
+    bounceevents.bounce_sub_type AS detail2
+   FROM ses_notifications.bounceevents
+UNION
+ SELECT complaintevents.notification_id,
+    complaintevents.notification_type,
+    complaintevents.sent_at,
+    complaintevents.source,
+    complaintevents.created_at,
+    complaintevents.complained_recipients AS recipients,
+    complaintevents.complaint_sub_type AS detail1,
+    complaintevents.complaint_feedback_type as detail2
+   FROM ses_notifications.complaintevents
+UNION
+ SELECT deliveryevents.notification_id,
+    deliveryevents.notification_type,
+    deliveryevents.sent_at,
+    deliveryevents.source,
+    deliveryevents.delivered_at AS created_at,
+    deliveryevents.recipients,
+    NULL::character varying AS detail1,
+    NULL::character varying AS detail2
+   FROM ses_notifications.deliveryevents
+UNION
+ SELECT openevents.notification_id,
+    openevents.notification_type,
+    openevents.sent_at,
+    openevents.source,
+    openevents.opened_at AS created_at,
+    openevents.recipients,
+    NULL::character varying AS detail1,
+    NULL::character varying AS detail2
+   FROM ses_notifications.openevents;

@@ -22,6 +22,7 @@ namespace SesNotifications.App.Services
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
         private readonly ISesComplaintEventsRepository _sesComplaintEventsRepository;
+        private readonly ISesOperationalRepository _sesOperationalRepository;
 
         public SearchService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
@@ -31,7 +32,8 @@ namespace SesNotifications.App.Services
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ISesBounceEventsRepository sesBounceEventsRepository,
-            ISesComplaintEventsRepository sesComplaintEventsRepository)
+            ISesComplaintEventsRepository sesComplaintEventsRepository,
+            ISesOperationalRepository sesOperationalRepository)
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
@@ -42,6 +44,7 @@ namespace SesNotifications.App.Services
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _sesBounceEventsRepository = sesBounceEventsRepository;
             _sesComplaintEventsRepository = sesComplaintEventsRepository;
+            _sesOperationalRepository = sesOperationalRepository;
         }
 
         public IList<SesDelivery> FindDeliveries(string email, DateTime start, DateTime end)
@@ -155,6 +158,11 @@ namespace SesNotifications.App.Services
             return _sesComplaintEventsRepository.Count(email, start, end);
         }
 
+        public int FindOperationalCount(string email, DateTime start, DateTime end)
+        {
+            return _sesOperationalRepository.Count(email, start, end);
+        }
+
         public IList<SesDelivery> FindDeliveries(string email, DateTime start, DateTime end, long? firstId, int page,
             int pageSize)
         {
@@ -200,6 +208,11 @@ namespace SesNotifications.App.Services
             int page, int pageSize)
         {
             return _sesComplaintEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+        }
+
+        public IList<SesOperational> FindOperational(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
+        {
+            return _sesOperationalRepository.FindById(email, start, end, firstId, page, pageSize);
         }
 
         public SesNotification FindRaw(long id)

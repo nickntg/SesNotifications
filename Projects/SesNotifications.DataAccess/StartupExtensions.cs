@@ -26,6 +26,7 @@ namespace SesNotifications.DataAccess
                     .Add<SesDeliveryEventMap>()
                     .Add<SesBounceEventMap>()
                     .Add<SesComplaintEventMap>()
+                    .Add<SesOperationalMap>()
                 )
                 .BuildSessionFactory();
 
@@ -53,6 +54,7 @@ namespace SesNotifications.DataAccess
             services.AddScoped<ISesDeliveryEventsRepository, SesDeliveryEventsRepository>();
             services.AddScoped<ISesBounceEventsRepository, SesBounceEventsRepository>();
             services.AddScoped<ISesComplaintEventsRepository, SesComplaintEventsRepository>();
+            services.AddScoped<ISesOperationalRepository, SesOperationalRepository>();
 
             return services;
         }
