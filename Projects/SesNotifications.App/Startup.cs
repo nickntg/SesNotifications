@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SesNotifications.App.Infrastructure;
 using SesNotifications.App.Services;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess;
@@ -20,14 +21,36 @@ namespace SesNotifications.App
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddNHibernate(Configuration.GetConnectionString("Database"));
 
             services.AddScopedRepositories();
             ConfigureScopedRepositories(services);
 
+            var oAuth = Configuration.GetSection("GoogleOAuth").Get<GoogleOAuth>();
+
+            services
+                .AddAuthentication(o =>
+                {
+                    o.DefaultScheme = Constants.ApplicationScheme;
+                    o.DefaultSignInScheme = Constants.SignInScheme;
+                })
+                .AddCookie(Constants.ApplicationScheme)
+                .AddCookie(Constants.SignInScheme)
+                .AddGoogle(o =>
+                {
+                    o.ClientId = oAuth.ClientId;
+                    o.ClientSecret = oAuth.ClientSecret;
+                });
+
             services.AddMvcWithUnitOfWork(0);   //Note: this won't work with Razor pages.
 
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddRazorPagesOptions(o =>
+                {
+                    o.Conventions.AuthorizeFolder("/");
+                    o.Conventions.AllowAnonymousToPage("/Index");
+                });
         }
 
         public void ConfigureScopedRepositories(IServiceCollection services)
@@ -51,6 +74,9 @@ namespace SesNotifications.App
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
