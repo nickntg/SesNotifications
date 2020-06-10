@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
+using SesNotifications.App.Helpers;
 using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 using SesNotifications.DataAccess.Repositories.Interfaces;
@@ -51,56 +52,56 @@ namespace SesNotifications.App.Services
         {
             return string.IsNullOrEmpty(email) 
                 ? _sesDeliveriesRepository.FindBySentDateRange(start, end) 
-                : _sesDeliveriesRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesDeliveriesRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesComplaint> FindComplaints(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesComplaintsRepository.FindBySentDateRange(start, end)
-                : _sesComplaintsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesComplaintsRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesBounce> FindBounces(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesBouncesRepository.FindBySentDateRange(start, end)
-                : _sesBouncesRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesBouncesRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesOpenEvent> FindOpenEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesOpensEventsRepository.FindBySentDateRange(start, end)
-                : _sesOpensEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesOpensEventsRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesSendEvent> FindSendEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesSendEventsRepository.FindBySentDateRange(start, end)
-                : _sesSendEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesSendEventsRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesDeliveryEvent> FindDeliveryEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesDeliveryEventsRepository.FindBySentDateRange(start, end)
-                : _sesDeliveryEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesDeliveryEventsRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesBounceEvent> FindBounceEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesBounceEventsRepository.FindBySentDateRange(start, end)
-                : _sesBounceEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesBounceEventsRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end)
         {
             return string.IsNullOrEmpty(email)
                 ? _sesComplaintEventsRepository.FindBySentDateRange(start, end)
-                : _sesComplaintEventsRepository.FindByRecipientAndSentDateRange($"%{email}%", start, end);
+                : _sesComplaintEventsRepository.FindByRecipientAndSentDateRange(email.PrepareForLike(), start, end);
         }
 
         public IList<SesNotification> FindRaw(DateTime start, DateTime end)
@@ -120,99 +121,99 @@ namespace SesNotifications.App.Services
 
         public int FindDeliveriesCount(string email, DateTime start, DateTime end)
         {
-            return _sesDeliveriesRepository.Count(email, start, end);
+            return _sesDeliveriesRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindComplaintsCount(string email, DateTime start, DateTime end)
         {
-            return _sesComplaintsRepository.Count(email, start, end);
+            return _sesComplaintsRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindBouncesCount(string email, DateTime start, DateTime end)
         {
-            return _sesBouncesRepository.Count(email, start, end);
+            return _sesBouncesRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindOpenEventsCount(string email, DateTime start, DateTime end)
         {
-            return _sesOpensEventsRepository.Count(email, start, end);
+            return _sesOpensEventsRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindSendEventsCount(string email, DateTime start, DateTime end)
         {
-            return _sesSendEventsRepository.Count(email, start, end);
+            return _sesSendEventsRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindDeliveryEventsCount(string email, DateTime start, DateTime end)
         {
-            return _sesDeliveryEventsRepository.Count(email, start, end);
+            return _sesDeliveryEventsRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindBounceEventsCount(string email, DateTime start, DateTime end)
         {
-            return _sesBounceEventsRepository.Count(email, start, end);
+            return _sesBounceEventsRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindComplaintEventCount(string email, DateTime start, DateTime end)
         {
-            return _sesComplaintEventsRepository.Count(email, start, end);
+            return _sesComplaintEventsRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public int FindOperationalCount(string email, DateTime start, DateTime end)
         {
-            return _sesOperationalRepository.Count(email, start, end);
+            return _sesOperationalRepository.Count(email.PrepareForLike(), start, end);
         }
 
         public IList<SesDelivery> FindDeliveries(string email, DateTime start, DateTime end, long? firstId, int page,
             int pageSize)
         {
-            return _sesDeliveriesRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesDeliveriesRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesComplaint> FindComplaints(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
         {
-            return _sesComplaintsRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesComplaintsRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesBounce> FindBounces(string email, DateTime start, DateTime end, long? firstId, int page,
             int pageSize)
         {
-            return _sesBouncesRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesBouncesRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesOpenEvent> FindOpenEvents(string email, DateTime start, DateTime end, long? firstId, int page,
             int pageSize)
         {
-            return _sesOpensEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesOpensEventsRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesSendEvent> FindSendEvents(string email, DateTime start, DateTime end, long? firstId, int page,
             int pageSize)
         {
-            return _sesSendEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesSendEventsRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesDeliveryEvent> FindDeliveryEvents(string email, DateTime start, DateTime end, long? firstId,
             int page, int pageSize)
         {
-            return _sesDeliveryEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesDeliveryEventsRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesBounceEvent> FindBounceEvents(string email, DateTime start, DateTime end, long? firstId,
             int page, int pageSize)
         {
-            return _sesBounceEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesBounceEventsRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesComplaintEvent> FindComplaintEvents(string email, DateTime start, DateTime end, long? firstId,
             int page, int pageSize)
         {
-            return _sesComplaintEventsRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesComplaintEventsRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public IList<SesOperational> FindOperational(string email, DateTime start, DateTime end, long? firstId, int page, int pageSize)
         {
-            return _sesOperationalRepository.FindById(email, start, end, firstId, page, pageSize);
+            return _sesOperationalRepository.FindById(email.PrepareForLike(), start, end, firstId, page, pageSize);
         }
 
         public SesNotification FindRaw(long id)
