@@ -211,6 +211,15 @@ CREATE INDEX notifications_message_id_idx ON ses_notifications.notifications (me
 CREATE INDEX notifications_received_at_idx ON ses_notifications.notifications (received_at);
 CREATE INDEX notifications_sent_at_idx ON ses_notifications.notifications (sent_at);
 
+CREATE TABLE ses_notifications.monitorrules (
+	id int NOT NULL GENERATED ALWAYS AS IDENTITY,
+	name varchar(100) NOT NULL,
+	json_matcher varchar(500) NOT NULL,
+	regex varchar(500) NOT NULL,
+	ses_message varchar(100) NOT NULL
+);
+CREATE UNIQUE INDEX monitorrules_id_idx ON ses_notifications.monitorrules (id);
+
 CREATE OR REPLACE VIEW ses_notifications.operational
 AS SELECT bounceevents.notification_id,
     bounceevents.notification_type,
