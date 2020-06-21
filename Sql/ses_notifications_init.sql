@@ -220,6 +220,14 @@ CREATE TABLE ses_notifications.monitorrules (
 );
 CREATE UNIQUE INDEX monitorrules_id_idx ON ses_notifications.monitorrules (id);
 
+CREATE TABLE ses_notifications."configuration" (
+	id int NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"key" varchar(100) NOT NULL,
+	value varchar(4000) NOT NULL
+);
+CREATE UNIQUE INDEX configuration_id_idx ON ses_notifications."configuration" (id);
+CREATE INDEX configuration_key_idx ON ses_notifications."configuration" ("key");
+
 CREATE OR REPLACE VIEW ses_notifications.operational
 AS SELECT bounceevents.notification_id,
     bounceevents.notification_type,

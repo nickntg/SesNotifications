@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NLog;
 using SesNotifications.App.Factories;
@@ -29,6 +28,7 @@ namespace SesNotifications.App.Services
         private readonly ISesDeliveryEventsRepository _sesDeliveryEventsRepository;
         private readonly ISesBounceEventsRepository _sesBounceEventsRepository;
         private readonly ISesComplaintEventsRepository _sesComplaintEventsRepository;
+        private readonly IRuleService _ruleService;
 
         public NotificationService(INotificationsRepository notificationsRepository,
             ISesBouncesRepository sesBouncesRepository,
@@ -38,8 +38,9 @@ namespace SesNotifications.App.Services
             ISesSendEventsRepository sesSendEventsRepository,
             ISesDeliveryEventsRepository sesDeliveryEventsRepository,
             ISesBounceEventsRepository sesBounceEventsRepository,
-            ISesComplaintEventsRepository sesComplaintEventsRepository
-            )
+            ISesComplaintEventsRepository sesComplaintEventsRepository,
+            IRuleService ruleService
+        )
         {
             _notificationsRepository = notificationsRepository;
             _sesBouncesRepository = sesBouncesRepository;
@@ -51,6 +52,7 @@ namespace SesNotifications.App.Services
             _sesDeliveryEventsRepository = sesDeliveryEventsRepository;
             _sesBounceEventsRepository = sesBounceEventsRepository;
             _sesComplaintEventsRepository = sesComplaintEventsRepository;
+            _ruleService = ruleService;
         }
 
         public void HandleNotification(string content)
@@ -127,6 +129,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(complaintEvent.Mail, content);
 
             _sesComplaintEventsRepository.Save(complaintEvent.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.ComplaintEvent);
         }
 
         private void HandleBounceEvent(string content)
@@ -136,6 +140,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(bounceEvent.Mail, content);
 
             _sesBounceEventsRepository.Save(bounceEvent.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.BounceEvent);
         }
 
         private void HandleDeliveryEvent(string content)
@@ -145,6 +151,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(delivery.Mail, content);
 
             _sesDeliveryEventsRepository.Save(delivery.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.DeliveryEvent);
         }
 
         private void HandleDelivery(string content)
@@ -154,6 +162,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(delivery.Mail, content);
 
             _sesDeliveriesRepository.Save(delivery.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.DeliveryNotification);
         }
 
         private void HandleComplaint(string content)
@@ -163,6 +173,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(complaint.Mail, content);
 
             _sesComplaintsRepository.Save(complaint.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.ComplaintNotification);
         }
 
         private void HandleBounce(string content)
@@ -172,6 +184,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(bounce.Mail, content);
 
             _sesBouncesRepository.Save(bounce.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.BounceEvent);
         }
 
         private void HandleOpenEvent(string content)
@@ -181,6 +195,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(open.Mail, content);
 
             _sesOpensEventsRepository.Save(open.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.OpenEvent);
         }
 
         private void HandleSendEvent(string content)
@@ -190,6 +206,8 @@ namespace SesNotifications.App.Services
             var notification = SaveNotification(send.Mail, content);
 
             _sesSendEventsRepository.Save(send.Create(notification.Id));
+
+            _ruleService.ProcessMessage(content, MonitorRuleType.SendEvent);
         }
 
         private SesNotification SaveNotification(SesMail mail, string content)

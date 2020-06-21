@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using SesNotifications.App.Factories;
 using SesNotifications.App.Models;
