@@ -67,6 +67,8 @@ namespace SesNotifications.App
         {
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<ISqsNotifier, SqsNotifier>();
+            services.AddScoped<IRuleService, RuleService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,10 +1,20 @@
 ﻿using System;
 using Moq;
 using Newtonsoft.Json;
+using SesNotifications.App.Models;
 using SesNotifications.App.Services;
+using SesNotifications.App.Services.Interfaces;
 using SesNotifications.DataAccess.Entities;
 using SesNotifications.DataAccess.Repositories.Interfaces;
 using Xunit;
+using SesBounce = SesNotifications.DataAccess.Entities.SesBounce;
+using SesBounceEvent = SesNotifications.DataAccess.Entities.SesBounceEvent;
+using SesComplaint = SesNotifications.DataAccess.Entities.SesComplaint;
+using SesComplaintEvent = SesNotifications.DataAccess.Entities.SesComplaintEvent;
+using SesDelivery = SesNotifications.DataAccess.Entities.SesDelivery;
+using SesDeliveryEvent = SesNotifications.DataAccess.Entities.SesDeliveryEvent;
+using SesOpenEvent = SesNotifications.DataAccess.Entities.SesOpenEvent;
+using SesSendEvent = SesNotifications.DataAccess.Entities.SesSendEvent;
 
 namespace SesNotifications.App.Tests.Services
 {
@@ -15,17 +25,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesDeliveries = new Mock<ISesDeliveriesRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesDeliveries.Setup(x => x.Save(It.IsAny<SesDelivery>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, mockSesDeliveries.Object,
-                null, null, null, null, null);
+                null, null, null, null, null, mockRuleService.Object);
 
             service.HandleNotification(Delivery);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesDeliveries.Verify(x => x.Save(It.IsAny<SesDelivery>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -33,17 +45,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesBounces = new Mock<ISesBouncesRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesBounces.Setup(x => x.Save(It.IsAny<SesBounce>()));
 
             var service = new NotificationService(mockNotifications.Object, mockSesBounces.Object, null, null,
-                null, null, null, null, null);
+                null, null, null, null, null, mockRuleService.Object);
 
             service.HandleNotification(Bounce);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesBounces.Verify(x => x.Save(It.IsAny<SesBounce>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -51,17 +65,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesComplaints = new Mock<ISesComplaintsRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesComplaints.Setup(x => x.Save(It.IsAny<SesComplaint>()));
 
             var service = new NotificationService(mockNotifications.Object, null, mockSesComplaints.Object, null,
-                null, null, null, null, null);
+                null, null, null, null, null, mockRuleService.Object);
 
             service.HandleNotification(Complaint);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesComplaints.Verify(x => x.Save(It.IsAny<SesComplaint>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -69,17 +85,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesOpens = new Mock<ISesOpensEventsRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesOpens.Setup(x => x.Save(It.IsAny<SesOpenEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                mockSesOpens.Object, null, null, null, null);
+                mockSesOpens.Object, null, null, null, null, mockRuleService.Object);
 
             service.HandleNotification(OpenEvent);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesOpens.Verify(x => x.Save(It.IsAny<SesOpenEvent>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -87,17 +105,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesSends = new Mock<ISesSendEventsRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesSends.Setup(x => x.Save(It.IsAny<SesSendEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, mockSesSends.Object, null, null, null);
+                null, mockSesSends.Object, null, null, null, mockRuleService.Object);
 
             service.HandleNotification(SendEvent);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesSends.Verify(x => x.Save(It.IsAny<SesSendEvent>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -105,17 +125,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesDeliveries = new Mock<ISesDeliveryEventsRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesDeliveries.Setup(x => x.Save(It.IsAny<SesDeliveryEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, null, mockSesDeliveries.Object, null, null);
+                null, null, mockSesDeliveries.Object, null, null, mockRuleService.Object);
 
             service.HandleNotification(DeliveryEvent);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesDeliveries.Verify(x => x.Save(It.IsAny<SesDeliveryEvent>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -123,17 +145,19 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesBounceEvents = new Mock<ISesBounceEventsRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesBounceEvents.Setup(x => x.Save(It.IsAny<SesBounceEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, null, null, mockSesBounceEvents.Object, null);
+                null, null, null, mockSesBounceEvents.Object, null, mockRuleService.Object);
 
             service.HandleNotification(BounceEvent);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesBounceEvents.Verify(x => x.Save(It.IsAny<SesBounceEvent>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
@@ -141,24 +165,26 @@ namespace SesNotifications.App.Tests.Services
         {
             var mockNotifications = new Mock<INotificationsRepository>(MockBehavior.Strict);
             var mockSesComplaintEvents = new Mock<ISesComplaintEventsRepository>(MockBehavior.Strict);
+            var mockRuleService = CreateRuleMock();
 
             mockNotifications.Setup(x => x.Save(It.IsAny<SesNotification>()));
             mockSesComplaintEvents.Setup(x => x.Save(It.IsAny<SesComplaintEvent>()));
 
             var service = new NotificationService(mockNotifications.Object, null, null, null,
-                null, null, null, null, mockSesComplaintEvents.Object);
+                null, null, null, null, mockSesComplaintEvents.Object, mockRuleService.Object);
 
             service.HandleNotification(ComplaintEvent);
 
             mockNotifications.Verify(x => x.Save(It.IsAny<SesNotification>()), Times.Exactly(1));
             mockSesComplaintEvents.Verify(x => x.Save(It.IsAny<SesComplaintEvent>()), Times.Exactly(1));
+            mockRuleService.Verify(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()), Times.Once);
         }
 
         [Fact]
         public void VerifyInvalidException()
         {
             var service =
-                new NotificationService(null, null, null, null, null, null, null, null, null);
+                new NotificationService(null, null, null, null, null, null, null, null, null, null);
 
             Assert.Throws<JsonReaderException>(() => service.HandleNotification(NotJson));
         }
@@ -167,9 +193,16 @@ namespace SesNotifications.App.Tests.Services
         public void VerifyUnsupportedException()
         {
             var service =
-                new NotificationService(null, null, null, null, null, null, null, null, null);
+                new NotificationService(null, null, null, null, null, null, null, null, null, null);
 
             Assert.Throws<NotSupportedException>(() => service.HandleNotification(Invalid));
+        }
+
+        private Mock<IRuleService> CreateRuleMock()
+        {
+            var mock = new Mock<IRuleService>(MockBehavior.Strict);
+            mock.Setup(x => x.ProcessMessage(It.IsAny<string>(), It.IsAny<MonitorRuleType>()));
+            return mock;
         }
 
         // Some of the examples taken from https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-examples.html.
