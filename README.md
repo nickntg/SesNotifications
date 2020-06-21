@@ -14,3 +14,5 @@ The purpose of this application is to implement an API that can accept [AWS SES 
 * Setup a postgres database according to the method you prefer and configure the application to use it.
 * Configure SNS Notifications in SES.
 * Make an SNS HTTP subscription to the API using raw delivery to have AWS start sending the notifications. Alternatively use a utility like [AWS Redrive](https://github.com/nickntg/awsredrive.core) to ensure that no SNS notifications are lost.
+* (Optional) Generate a Google client id and client secret and enter them in appSettings.json in order to enable Google authentication.
+
