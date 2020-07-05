@@ -1,0 +1,64 @@
+﻿<ul class="pagination">
+    @if ((int)ViewData["NumberOfPages"] <= 20)
+    {
+        @for (var i = 1; i <= (int)ViewData["NumberOfPages"]; i++)
+        {
+            <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
+                <a asp-page="@ViewData["PageName"]"
+                   asp-route-currentpage="@i"
+                   asp-route-start="@ViewData["Start"]"
+                   asp-route-end="@ViewData["End"]"
+                   class="page-link">@i</a>
+            </li>
+        }
+    }
+
+    @if ((int)ViewData["NumberOfPages"] > 20)
+    {
+        {
+            <li class="page-item @(1 == (int) ViewData["PageNumber"] ? "active" : "")">
+                <a asp-page="@ViewData["PageName"]"
+                   asp-route-currentpage="1"
+                   asp-route-start="@ViewData["Start"]"
+                   asp-route-end="@ViewData["End"]"
+                   class="page-link">&lt;&lt;</a>
+            </li>
+
+            @if ((int)ViewData["PageNumber"] <= 18)
+            {
+                @for (var i = 1; i <= 19; i++)
+                {
+                    <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
+                        <a asp-page="@ViewData["PageName"]"
+                           asp-route-currentpage="@i"
+                           asp-route-start="@ViewData["Start"]"
+                           asp-route-end="@ViewData["End"]"
+                           class="page-link">@i</a>
+                    </li>
+                }
+            }
+
+            @if ((int)ViewData["PageNumber"] > 18)
+            {
+                @for (var i = (int)ViewData["PageNumber"] - 18; i <= (int)ViewData["PageNumber"] + ((int)ViewData["PageNumber"] == (int)ViewData["NumberOfPages"] ? 0 : 1); i++)
+                {
+                    <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
+                        <a asp-page="@ViewData["PageName"]"
+                           asp-route-currentpage="@i"
+                           asp-route-start="@ViewData["Start"]"
+                           asp-route-end="@ViewData["End"]"
+                           class="page-link">@i</a>
+                    </li>
+                }
+            }
+
+            <li class="page-item @((int) ViewData["NumberOfPages"] == (int) ViewData["PageNumber"] ? "active" : "")">
+                <a asp-page="@ViewData["PageName"]"
+                   asp-route-currentpage="@ViewData["NumberOfPages"]"
+                   asp-route-start="@ViewData["Start"]"
+                   asp-route-end="@ViewData["End"]"
+                   class="page-link">&gt;&gt;</a>
+            </li>
+        }
+    }
+</ul>

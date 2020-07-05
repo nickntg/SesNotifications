@@ -25,7 +25,7 @@
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        
+
         <br />
 
         <table class="table">
@@ -48,22 +48,11 @@
                 </tr>
             }
         </table>
-        
+
         <div>
             @if (Model.Raw.Count > 0)
             {
-                <ul class="pagination">
-                    @for (var i = 1; i <= (int) ViewData["NumberOfPages"]; i++)
-                    {
-                        <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
-                            <a asp-page="FindRaw" 
-                               asp-route-currentpage="@i" 
-                               asp-route-start="@ViewData["Start"]"
-                               asp-route-end ="@ViewData["End"]"
-                               class="page-link">@i</a>
-                        </li>
-                    }
-                </ul>
+                @await Html.PartialAsync("_Paging")
             }
         </div>
     </div>

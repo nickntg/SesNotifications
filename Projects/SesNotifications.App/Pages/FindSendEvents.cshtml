@@ -68,19 +68,7 @@
         <div>
             @if (Model.SendEvents.Count > 0)
             {
-                <ul class="pagination">
-                    @for (var i = 1; i <= (int) ViewData["NumberOfPages"]; i++)
-                    {
-                        <li class="page-item @(i == (int) ViewData["PageNumber"] ? "active" : "")">
-                            <a asp-page="FindSendEvents" 
-                               asp-route-currentpage="@i" 
-                               asp-route-start="@ViewData["Start"]"
-                               asp-route-end ="@ViewData["End"]"
-                               asp-route-email ="@ViewData["Email"]"
-                               class="page-link">@i</a>
-                        </li>
-                    }
-                </ul>
+                @await Html.PartialAsync("_Paging")
             }
         </div>
     </div>
