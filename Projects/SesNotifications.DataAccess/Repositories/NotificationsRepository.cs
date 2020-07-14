@@ -81,5 +81,14 @@ namespace SesNotifications.DataAccess.Repositories
                 .List<SesNotification>()
                 .Count;
         }
+
+        public IList<SesNotification> FindByIdRange(long firstId, int count)
+        {
+            return Session.CreateCriteria<SesNotification>()
+                .Add(Restrictions.Ge(nameof(SesNotification.Id), firstId))
+                .AddOrder(Order.Asc(nameof(SesNotification.Id)))
+                .SetMaxResults(count)
+                .List<SesNotification>();
+        }
     }
 }
